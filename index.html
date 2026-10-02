@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Enzo Ceccarelli | Portfolio BTS SIO SISR - Cyberpunk Edition</title>
+    <title>Enzo Ceccarelli | Portfolio BTS SIO SISR - Cyberpunk & Matrix Edition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portfolio d'Enzo Ceccarelli, étudiant en BTS SIO SISR à Metz, alternant au 3RHC Étain. Spécialiste Administration Systèmes, Réseaux & Cybersécurité.">
 
@@ -12,17 +12,19 @@
     <!-- Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Cloudflare Turnstile CAPTCHA (Anti-Spam) -->
+    <!-- Cloudflare Turnstile CAPTCHA -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
     <style>
     :root {
         --cp-yellow: #fcee0a;
         --cp-red: #ff003c;
-        --cp-blue: #00f0ff;
-        --cp-dark: #08080c;
-        --cp-dark-card: rgba(12, 14, 22, 0.85);
-        --cp-border: rgba(252, 238, 10, 0.25);
+        --cp-blue: #00f3ff;
+        --cp-magenta: #ff0055;
+        --cp-green: #00ff66;
+        --cp-dark: #050608;
+        --cp-dark-card: rgba(10, 12, 18, 0.88);
+        --cp-border: rgba(0, 243, 255, 0.25);
         --cp-text: #e0e6ed;
         --cp-muted: #8a99ad;
         --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -46,6 +48,7 @@
         overflow-x: hidden;
     }
 
+    /* CANVAS DE FOND CARTE MÈRE & CÂBLES */
     #cyberpunk-canvas {
         position: fixed;
         top: 0;
@@ -57,7 +60,7 @@
         pointer-events: none;
     }
 
-    /* Overlay Scanlines style écran CRT/HUD */
+    /* SCANLINES / CRT SCREEN EFFECT */
     .scanlines {
         position: fixed;
         top: 0;
@@ -68,14 +71,145 @@
         pointer-events: none;
         background: linear-gradient(
             rgba(18, 16, 16, 0) 50%, 
-            rgba(0, 0, 0, 0.35) 50%
+            rgba(0, 0, 0, 0.4) 50%
         ), linear-gradient(
             90deg,
-            rgba(255, 0, 60, 0.03),
-            rgba(0, 240, 255, 0.02),
-            rgba(252, 238, 10, 0.03)
+            rgba(255, 0, 60, 0.02),
+            rgba(0, 243, 255, 0.02),
+            rgba(252, 238, 10, 0.02)
         );
         background-size: 100% 3px, 6px 100%;
+    }
+
+    #cyber-boot-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #030406;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #matrix-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.35;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .boot-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 750px;
+        background: rgba(8, 10, 16, 0.92);
+        border: 2px solid var(--cp-blue);
+        box-shadow: 0 0 30px rgba(0, 243, 255, 0.3), inset 0 0 20px rgba(0, 243, 255, 0.1);
+        padding: 2.5rem;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+    }
+
+    .boot-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--cp-border);
+        padding-bottom: 0.8rem;
+        margin-bottom: 1.5rem;
+        font-family: monospace;
+        color: var(--cp-blue);
+        font-weight: bold;
+    }
+
+    .boot-terminal {
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 0.9rem;
+        color: var(--cp-green);
+        height: 180px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-bottom: 1.5rem;
+        scrollbar-width: thin;
+    }
+
+    .boot-line {
+        display: flex;
+        gap: 10px;
+    }
+
+    .boot-line .time { color: var(--cp-muted); }
+    .boot-line .status { color: var(--cp-yellow); font-weight: bold; }
+    .boot-line .msg { color: #fff; }
+
+    .progress-bar-container {
+        width: 100%;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--cp-blue);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--cp-blue), var(--cp-yellow), var(--cp-magenta));
+        box-shadow: 0 0 15px var(--cp-blue);
+        transition: width 0.1s linear;
+    }
+
+    .enter-btn-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .boot-enter-btn {
+        background: var(--cp-yellow);
+        color: #000;
+        border: none;
+        padding: 1rem 2.5rem;
+        font-family: monospace;
+        font-size: 1.05rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        opacity: 0.3;
+        pointer-events: none;
+        transition: var(--transition);
+        clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
+    }
+
+    .boot-enter-btn.ready {
+        opacity: 1;
+        pointer-events: auto;
+        box-shadow: 0 0 25px rgba(252, 238, 10, 0.7);
+        animation: pulseBtn 1.5s infinite;
+    }
+
+    .boot-enter-btn.ready:hover {
+        background: #fff;
+        box-shadow: 0 0 40px rgba(255, 255, 255, 0.9);
+        transform: scale(1.04);
+    }
+
+    @keyframes pulseBtn {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
     }
 
     .container {
@@ -91,9 +225,9 @@
         transition: var(--transition);
     }
 
-    /* HEADER FIXATION & NAVBAR ALIGNMENT */
+    /* HEADER & NAVBAR */
     header {
-        background: rgba(8, 8, 12, 0.94);
+        background: rgba(5, 6, 8, 0.94);
         backdrop-filter: blur(12px);
         border-bottom: 2px solid var(--cp-yellow);
         position: sticky;
@@ -133,11 +267,11 @@
         display: flex;
         align-items: center;
         overflow-x: auto;
-        scrollbar-width: none; /* Firefox */
+        scrollbar-width: none;
     }
 
     nav::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
+        display: none;
     }
 
     .nav-links {
@@ -285,15 +419,15 @@
     .card:hover {
         border-color: var(--cp-blue);
         border-left-color: var(--cp-red);
-        box-shadow: 0 0 25px rgba(0, 240, 255, 0.25);
+        box-shadow: 0 0 25px rgba(0, 243, 255, 0.25);
         transform: translateY(-4px);
     }
 
     .tag {
-        background: rgba(0, 240, 255, 0.1);
+        background: rgba(0, 243, 255, 0.1);
         color: var(--cp-blue);
         padding: 0.2rem 0.6rem;
-        border: 1px solid rgba(0, 240, 255, 0.3);
+        border: 1px solid rgba(0, 243, 255, 0.3);
         font-size: 0.75rem;
         font-weight: 700;
         margin-right: 5px;
@@ -412,7 +546,7 @@
     .btn-outline:hover { 
         background: var(--cp-blue); 
         color: #000; 
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
         transform: translateY(-2px);
     }
 
@@ -432,7 +566,7 @@
         text-align: center;
         border-top: 2px solid var(--cp-red);
         color: var(--cp-muted);
-        background: rgba(5, 5, 8, 0.95);
+        background: rgba(5, 6, 8, 0.95);
     }
 
     /* Responsive Mobile Styles */
@@ -457,8 +591,30 @@
 </head>
 <body>
 
+    <!-- CANVASES DE FOND ET OVERLAY CRT -->
     <canvas id="cyberpunk-canvas"></canvas>
     <div class="scanlines"></div>
+
+    <div id="cyber-boot-overlay">
+        <canvas id="matrix-canvas"></canvas>
+        <div class="boot-content">
+            <div class="boot-header">
+                <span><i class="fas fa-terminal"></i> SYSTEM BOOT PROTOCOL v4.8</span>
+                <span id="boot-status-text">INITIALIZING...</span>
+            </div>
+            <div class="boot-terminal" id="boot-terminal-log"></div>
+            
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="boot-progress-fill"></div>
+            </div>
+
+            <div class="enter-btn-container">
+                <button class="boot-enter-btn" id="boot-enter-btn">
+                    <i class="fas fa-shield-halved"></i> ACCÈS AUTORISÉ // ACCÉDER AU SYSTÈME
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- HEADER / NAVIGATION -->
     <header>
@@ -483,7 +639,6 @@
     </header>
 
     <main>
-        <!-- HERO -->
         <section id="accueil" class="hero">
             <div class="container reveal">
                 <span class="cyber-badge">System Status: Online</span>
@@ -601,7 +756,6 @@
             </div>
         </section>
 
-        <!-- PROJETS & TRAVAUX PRATIQUES -->
         <section id="projets">
             <div class="container">
                 <h2 class="section-title">Projets & Travaux Pratiques</h2>
@@ -726,7 +880,7 @@
             </div>
         </section>
 
-        <!-- EPREUVE E4 & TABLEAU DE SYNTHESE -->
+        <!-- EPREUVE E4 -->
         <section id="epreuve-e4">
             <div class="container">
                 <h2 class="section-title">Portefeuille de Compétences (Épreuve E4)</h2>
@@ -772,7 +926,7 @@
             </div>
         </section>
 
-        <!-- CONTACT AVEC CAPTCHA TURNSTILE -->
+        <!-- CONTACT -->
         <section id="contact">
             <div class="container">
                 <h2 class="section-title">Canal Sécurisé // Contact</h2>
@@ -794,7 +948,7 @@
 
     <!-- FOOTER -->
     <footer>
-        <p>&copy; <span id="year"></span> Enzo Ceccarelli — BTS SIO SISR // Cyberpunk HUD System</p>
+        <p>&copy; <span id="year"></span> Enzo Ceccarelli — BTS SIO SISR // Cyber Matrix Network</p>
         <p style="margin-top: 10px; font-size: 1.3rem; display: flex; justify-content: center; gap: 20px;">
            <a href="https://www.linkedin.com/in/enzo-ceccarelli-891436324" target="_blank" style="color: var(--cp-yellow);" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
            <a href="https://github.com/votre-pseudo-github" target="_blank" style="color: var(--cp-blue);" title="GitHub"><i class="fab fa-github"></i></a>
@@ -802,10 +956,9 @@
     </footer>
 
     <script>
-        // 1. Mise à jour de l'année dans le footer
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // 2. Navigation Mobile Toggle
+        // Navigation Mobile Toggle
         const menuToggle = document.getElementById('menu-toggle');
         const navLinks = document.getElementById('nav-links');
 
@@ -813,19 +966,14 @@
             navLinks.classList.toggle('active');
         });
 
-        // Fermeture automatique du menu lors du clic sur un lien mobile
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
             });
         });
 
-        // 3. Intersection Observer pour les effets d'apparition (.reveal)
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
+        // Intersection Observer pour l'animation .reveal
+        const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -837,152 +985,317 @@
 
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-        // 4. ANIMATION CANVAS CYBERPUNK DATA-STREAM & PERSPECTIVE GRID (style Gif / HUD Cyberpunk)
+        // Matrix Code Rain pour l'overlay de boot
+        const matrixCanvas = document.getElementById('matrix-canvas');
+        const mCtx = matrixCanvas.getContext('2d');
+        let mWidth = matrixCanvas.width = window.innerWidth;
+        let mHeight = matrixCanvas.height = window.innerHeight;
+
+        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*';
+        const alphabet = katakana + latin;
+
+        const fontSize = 16;
+        let columns = Math.floor(mWidth / fontSize);
+        let rainDrops = Array(columns).fill(1);
+
+        window.addEventListener('resize', () => {
+            mWidth = matrixCanvas.width = window.innerWidth;
+            mHeight = matrixCanvas.height = window.innerHeight;
+            columns = Math.floor(mWidth / fontSize);
+            rainDrops = Array(columns).fill(1);
+        });
+
+        function drawMatrix() {
+            mCtx.fillStyle = 'rgba(3, 4, 6, 0.1)';
+            mCtx.fillRect(0, 0, mWidth, mHeight);
+
+            mCtx.fillStyle = '#00ff66';
+            mCtx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                mCtx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if (rainDrops[i] * fontSize > mHeight && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        let matrixInterval = setInterval(drawMatrix, 30);
+
+        // Terminal Boot Log & Progress Bar
+        const bootLogs = [
+            { time: "0.001s", status: "SYS_INIT", msg: "Establishing link to ENZO_CECCARELLI_NET..." },
+            { time: "0.142s", status: "AUTH_CHECK", msg: "Bypassing 3RHC security protocol layers..." },
+            { time: "0.289s", status: "NET_CONFIG", msg: "Routing fiber cables (VLAN 10 / WAN Interconnect)..." },
+            { time: "0.450s", status: "DECRYPT", msg: "Unpacking BTS SIO SISR modules & certifications..." },
+            { time: "0.620s", status: "HARDENING", msg: "Checking pfSense & OPNsense firewall rules..." },
+            { time: "0.810s", status: "HARDWARE", msg: "Motherboard nodes online. Fiber optical sync: OK." },
+            { time: "0.980s", status: "SUCCESS", msg: "All system parameters loaded successfully." }
+        ];
+
+        const logContainer = document.getElementById('boot-terminal-log');
+        const progressFill = document.getElementById('boot-progress-fill');
+        const statusText = document.getElementById('boot-status-text');
+        const enterBtn = document.getElementById('boot-enter-btn');
+        const bootOverlay = document.getElementById('cyber-boot-overlay');
+
+        let currentLogIndex = 0;
+        let progress = 0;
+
+        function updateBootSequence() {
+            if (currentLogIndex < bootLogs.length) {
+                const log = bootLogs[currentLogIndex];
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.innerHTML = `<span class="time">[${log.time}]</span> <span class="status">[${log.status}]</span> <span class="msg">${log.msg}</span>`;
+                logContainer.appendChild(line);
+                logContainer.scrollTop = logContainer.scrollHeight;
+
+                currentLogIndex++;
+                progress = Math.round((currentLogIndex / bootLogs.length) * 100);
+                progressFill.style.width = `${progress}%`;
+
+                setTimeout(updateBootSequence, 350);
+            } else {
+                statusText.style.color = '#00ff66';
+                statusText.textContent = 'SYSTEM READY';
+                enterBtn.classList.add('ready');
+            }
+        }
+
+        setTimeout(updateBootSequence, 400);
+
+        enterBtn.addEventListener('click', () => {
+            bootOverlay.style.opacity = '0';
+            bootOverlay.style.visibility = 'hidden';
+            clearInterval(matrixInterval);
+        });
+
+
         const canvas = document.getElementById('cyberpunk-canvas');
         const ctx = canvas.getContext('2d');
 
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
+        let chips = [];
+        let circuitTraces = [];
+        let pulses = [];
+
+        class Chip {
+            constructor(x, y, w, h, label) {
+                this.x = x;
+                this.y = y;
+                this.w = w;
+                this.h = h;
+                this.label = label;
+                this.pins = [];
+                this.generatePins();
+            }
+
+            generatePins() {
+                const pinSpacing = 12;
+                // Top & Bottom pins
+                for (let px = this.x + 10; px <= this.x + this.w - 10; px += pinSpacing) {
+                    this.pins.push({ x: px, y: this.y });
+                    this.pins.push({ x: px, y: this.y + this.h });
+                }
+                // Left & Right pins
+                for (let py = this.y + 10; py <= this.y + this.h - 10; py += pinSpacing) {
+                    this.pins.push({ x: this.x, y: py });
+                    this.pins.push({ x: this.x + this.w, y: py });
+                }
+            }
+
+            draw() {
+                // Chip Body
+                ctx.fillStyle = 'rgba(12, 16, 24, 0.95)';
+                ctx.strokeStyle = '#00f3ff';
+                ctx.lineWidth = 1.5;
+                ctx.fillRect(this.x, this.y, this.w, this.h);
+                ctx.strokeRect(this.x, this.y, this.w, this.h);
+
+                // Chip Core Glow
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.08)';
+                ctx.fillRect(this.x + 4, this.y + 4, this.w - 8, this.h - 8);
+
+                // Pins
+                ctx.fillStyle = '#ff0055';
+                this.pins.forEach(p => {
+                    ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
+                });
+
+                // Label
+                ctx.fillStyle = '#fcee0a';
+                ctx.font = '10px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.label, this.x + this.w / 2, this.y + this.h / 2 + 3);
+            }
+        }
+
+        class CircuitTrace {
+            constructor(startX, startY, endX, endY, isFiber = false) {
+                this.points = [];
+                this.isFiber = isFiber;
+                this.color = isFiber ? '#ff0055' : '#00f3ff';
+                this.buildPath(startX, startY, endX, endY);
+            }
+
+            buildPath(sx, sy, ex, ey) {
+                this.points.push({ x: sx, y: sy });
+                
+                // Génération de coudes orthogonaux à 45/90 degrés style carte mère
+                const midX = (sx + ex) / 2;
+                if (Math.random() > 0.5) {
+                    this.points.push({ x: midX, y: sy });
+                    this.points.push({ x: midX, y: ey });
+                } else {
+                    const midY = (sy + ey) / 2;
+                    this.points.push({ x: sx, y: midY });
+                    this.points.push({ x: ex, y: midY });
+                }
+                
+                this.points.push({ x: ex, y: ey });
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.points[0].x, this.points[0].y);
+                for (let i = 1; i < this.points.length; i++) {
+                    ctx.lineTo(this.points[i].x, this.points[i].y);
+                }
+                ctx.strokeStyle = this.isFiber ? 'rgba(255, 0, 85, 0.3)' : 'rgba(0, 243, 255, 0.2)';
+                ctx.lineWidth = this.isFiber ? 2.5 : 1.2;
+                ctx.stroke();
+
+                // Contact pads at endpoints
+                const last = this.points[this.points.length - 1];
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(last.x, last.y, this.isFiber ? 3 : 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        class DataPulse {
+            constructor(trace) {
+                this.trace = trace;
+                this.currentSegment = 0;
+                this.progress = 0;
+                this.speed = Math.random() * 0.02 + 0.015;
+                this.color = trace.isFiber ? '#ff0055' : '#00f3ff';
+                this.length = Math.random() * 20 + 10;
+            }
+
+            update() {
+                this.progress += this.speed;
+                if (this.progress >= 1) {
+                    this.progress = 0;
+                    this.currentSegment++;
+                    if (this.currentSegment >= this.trace.points.length - 1) {
+                        this.currentSegment = 0;
+                    }
+                }
+            }
+
+            draw() {
+                const p1 = this.trace.points[this.currentSegment];
+                const p2 = this.trace.points[this.currentSegment + 1];
+
+                const currX = p1.x + (p2.x - p1.x) * this.progress;
+                const currY = p1.y + (p2.y - p1.y) * this.progress;
+
+                // Glowing pulse
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 10;
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(currX, currY, this.trace.isFiber ? 3.5 : 2.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0; // reset
+            }
+        }
+
+        function initMotherboard() {
+            chips = [];
+            circuitTraces = [];
+            pulses = [];
+
+            // Puces principales
+            const chipLabels = ["CPU_RYZEN", "GPU_RTX", "3RHC_NET", "PF_SENSE", "AD_DS", "GLPI_V10"];
+            const padding = 100;
+
+            for (let i = 0; i < 6; i++) {
+                const w = Math.random() * 60 + 90;
+                const h = Math.random() * 40 + 70;
+                const x = Math.random() * (width - w - padding * 2) + padding;
+                const y = Math.random() * (height - h - padding * 2) + padding;
+                chips.push(new Chip(x, y, w, h, chipLabels[i]));
+            }
+
+            // Interconnexions par circuits et câbles fibre entre puces et nœuds
+            for (let i = 0; i < chips.length; i++) {
+                const c1 = chips[i];
+                const c2 = chips[(i + 1) % chips.length];
+
+                const p1 = c1.pins[Math.floor(Math.random() * c1.pins.length)];
+                const p2 = c2.pins[Math.floor(Math.random() * c2.pins.length)];
+
+                const isFiber = i % 2 === 0;
+                const trace = new CircuitTrace(p1.x, p1.y, p2.x, p2.y, isFiber);
+                circuitTraces.push(trace);
+
+                // Multiples impulsions de données sur chaque câble
+                pulses.push(new DataPulse(trace));
+                pulses.push(new DataPulse(trace));
+            }
+
+            // Traces secondaires vers les bords de l'écran
+            chips.forEach(chip => {
+                for (let k = 0; k < 2; k++) {
+                    const pin = chip.pins[Math.floor(Math.random() * chip.pins.length)];
+                    const targetX = Math.random() > 0.5 ? 0 : width;
+                    const targetY = Math.random() * height;
+                    const trace = new CircuitTrace(pin.x, pin.y, targetX, targetY, Math.random() > 0.5);
+                    circuitTraces.push(trace);
+                    pulses.push(new DataPulse(trace));
+                }
+            });
+        }
+
         window.addEventListener('resize', () => {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            initBeams();
-            initParticles();
+            initMotherboard();
         });
 
-        // Définition des faisceaux et lignes néons
-        let beams = [];
-        let particles = [];
+        initMotherboard();
 
-        class Beam {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.y = Math.random() * height;
-                this.height = Math.random() * 4 + 1;
-                this.length = Math.random() * (width * 0.6) + width * 0.2;
-                this.x = -this.length - Math.random() * width;
-                this.speed = Math.random() * 12 + 8;
-                this.color = Math.random() > 0.4 ? 'rgba(0, 240, 255, ' : 'rgba(255, 0, 60, ';
-                this.opacity = Math.random() * 0.6 + 0.2;
-            }
-
-            update() {
-                this.x += this.speed;
-                if (this.x > width) {
-                    this.reset();
-                }
-            }
-
-            draw() {
-                let grad = ctx.createLinearGradient(this.x, this.y, this.x + this.length, this.y);
-                grad.addColorStop(0, 'rgba(0,0,0,0)');
-                grad.addColorStop(0.5, this.color + this.opacity + ')');
-                grad.addColorStop(1, 'rgba(0,0,0,0)');
-
-                ctx.fillStyle = grad;
-                ctx.fillRect(this.x, this.y, this.length, this.height);
-            }
-        }
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 3 + 1;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-                this.color = Math.random() > 0.5 ? '#00f0ff' : '#fcee0a';
-                this.alpha = Math.random() * 0.8 + 0.2;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > width || this.y < 0 || this.y > height) {
-                    this.reset();
-                    this.x = 0;
-                }
-            }
-
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.alpha;
-                ctx.fillRect(this.x, this.y, this.size, this.size);
-                ctx.globalAlpha = 1.0;
-            }
-        }
-
-        function initBeams() {
-            beams = [];
-            const count = Math.floor(width / 35);
-            for (let i = 0; i < count; i++) {
-                beams.push(new Beam());
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const count = Math.floor(width / 20);
-            for (let i = 0; i < count; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        initBeams();
-        initParticles();
-
-        // Trace la grille cyberpunk perspective en arrière-plan
-        function drawGrid() {
-            ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
-            ctx.lineWidth = 1;
-
-            const gridSize = 40;
-            for (let x = 0; x < width; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
-
-            for (let y = 0; y < height; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
-            }
-        }
-
-        // Boucle d'animation
-        function animate() {
-            ctx.fillStyle = 'rgba(8, 8, 12, 0.25)';
+        function animateMotherboard() {
+            ctx.fillStyle = 'rgba(5, 6, 8, 0.25)';
             ctx.fillRect(0, 0, width, height);
 
-            drawGrid();
+            // 1. Traces de carte mère & câbles fibre
+            circuitTraces.forEach(t => t.draw());
 
-            beams.forEach(beam => {
-                beam.update();
-                beam.draw();
-            });
+            // 2. Puces informatiques
+            chips.forEach(c => c.draw());
 
-            particles.forEach(p => {
+            // 3. Impulsions de données/lumière
+            pulses.forEach(p => {
                 p.update();
                 p.draw();
             });
 
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateMotherboard);
         }
 
         window.onload = function() {
-            animate();
+            animateMotherboard();
         };
     </script>
 </body>
