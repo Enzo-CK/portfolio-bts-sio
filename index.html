@@ -1,1302 +1,954 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 <head>
     <meta charset="UTF-8">
-    <title>Enzo Ceccarelli | Portfolio BTS SIO SISR - Cyberpunk & Matrix Edition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portfolio d'Enzo Ceccarelli, étudiant en BTS SIO SISR à Metz, alternant au 3RHC Étain. Spécialiste Administration Systèmes, Réseaux & Cybersécurité.">
+    <title>Enzo Ceccarelli - Portfolio BTS SIO SISR | Cyberpunk Edition</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            yellow: '#fcee0a',
+                            cyan: '#00f3ff',
+                            magenta: '#ff0055',
+                            dark: '#0a0a12',
+                            card: '#12121f',
+                            accent: '#1f1f3a'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['Fira Code', 'Courier New', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/server.png">
-
-    <!-- Font Awesome pour les icônes -->
+    <!-- Font Awesome Icons & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Cloudflare Turnstile CAPTCHA -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-    :root {
-        --cp-yellow: #fcee0a;
-        --cp-red: #ff003c;
-        --cp-blue: #00f3ff;
-        --cp-magenta: #ff0055;
-        --cp-green: #00ff66;
-        --cp-dark: #050608;
-        --cp-dark-card: rgba(10, 12, 18, 0.88);
-        --cp-border: rgba(0, 243, 255, 0.25);
-        --cp-text: #e0e6ed;
-        --cp-muted: #8a99ad;
-        --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    html {
-        scroll-behavior: smooth;
-    }
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        background: var(--cp-dark);
-        color: var(--cp-text);
-        line-height: 1.6;
-        overflow-x: hidden;
-    }
-
-    /* CANVAS DE FOND CARTE MÈRE & CÂBLES */
-    #cyberpunk-canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -2;
-        background-color: var(--cp-dark);
-        pointer-events: none;
-    }
-
-    /* SCANLINES / CRT SCREEN EFFECT */
-    .scanlines {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: -1;
-        pointer-events: none;
-        background: linear-gradient(
-            rgba(18, 16, 16, 0) 50%, 
-            rgba(0, 0, 0, 0.4) 50%
-        ), linear-gradient(
-            90deg,
-            rgba(255, 0, 60, 0.02),
-            rgba(0, 243, 255, 0.02),
-            rgba(252, 238, 10, 0.02)
-        );
-        background-size: 100% 3px, 6px 100%;
-    }
-
-    #cyber-boot-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: #030406;
-        z-index: 99999;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem;
-        transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
-
-    #matrix-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0.35;
-        z-index: 1;
-        pointer-events: none;
-    }
-
-    .boot-content {
-        position: relative;
-        z-index: 2;
-        width: 100%;
-        max-width: 750px;
-        background: rgba(8, 10, 16, 0.92);
-        border: 2px solid var(--cp-blue);
-        box-shadow: 0 0 30px rgba(0, 243, 255, 0.3), inset 0 0 20px rgba(0, 243, 255, 0.1);
-        padding: 2.5rem;
-        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
-    }
-
-    .boot-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid var(--cp-border);
-        padding-bottom: 0.8rem;
-        margin-bottom: 1.5rem;
-        font-family: monospace;
-        color: var(--cp-blue);
-        font-weight: bold;
-    }
-
-    .boot-terminal {
-        font-family: 'Consolas', 'Courier New', monospace;
-        font-size: 0.9rem;
-        color: var(--cp-green);
-        height: 180px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-        margin-bottom: 1.5rem;
-        scrollbar-width: thin;
-    }
-
-    .boot-line {
-        display: flex;
-        gap: 10px;
-    }
-
-    .boot-line .time { color: var(--cp-muted); }
-    .boot-line .status { color: var(--cp-yellow); font-weight: bold; }
-    .boot-line .msg { color: #fff; }
-
-    .progress-bar-container {
-        width: 100%;
-        height: 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid var(--cp-blue);
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-    }
-
-    .progress-bar-fill {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, var(--cp-blue), var(--cp-yellow), var(--cp-magenta));
-        box-shadow: 0 0 15px var(--cp-blue);
-        transition: width 0.1s linear;
-    }
-
-    .enter-btn-container {
-        display: flex;
-        justify-content: center;
-    }
-
-    .boot-enter-btn {
-        background: var(--cp-yellow);
-        color: #000;
-        border: none;
-        padding: 1rem 2.5rem;
-        font-family: monospace;
-        font-size: 1.05rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        cursor: pointer;
-        opacity: 0.3;
-        pointer-events: none;
-        transition: var(--transition);
-        clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
-    }
-
-    .boot-enter-btn.ready {
-        opacity: 1;
-        pointer-events: auto;
-        box-shadow: 0 0 25px rgba(252, 238, 10, 0.7);
-        animation: pulseBtn 1.5s infinite;
-    }
-
-    .boot-enter-btn.ready:hover {
-        background: #fff;
-        box-shadow: 0 0 40px rgba(255, 255, 255, 0.9);
-        transform: scale(1.04);
-    }
-
-    @keyframes pulseBtn {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.02); }
-    }
-
-    .container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-    }
-
-    a {
-        text-decoration: none;
-        color: inherit;
-        transition: var(--transition);
-    }
-
-    /* HEADER & NAVBAR */
-    header {
-        background: rgba(5, 6, 8, 0.94);
-        backdrop-filter: blur(12px);
-        border-bottom: 2px solid var(--cp-yellow);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 4px 20px rgba(252, 238, 10, 0.15);
-    }
-
-    .navbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.8rem 0;
-        flex-wrap: nowrap;
-        gap: 1rem;
-    }
-
-    .logo {
-        font-weight: 900;
-        color: var(--cp-yellow);
-        font-size: 1.25rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    .logo::before {
-        content: "//";
-        color: var(--cp-red);
-    }
-
-    nav {
-        display: flex;
-        align-items: center;
-        overflow-x: auto;
-        scrollbar-width: none;
-    }
-
-    nav::-webkit-scrollbar {
-        display: none;
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 0.8rem;
-        list-style: none;
-        align-items: center;
-        flex-wrap: nowrap;
-        white-space: nowrap;
-    }
-
-    .nav-links a {
-        font-size: 0.82rem;
-        color: var(--cp-muted);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        padding: 0.4rem 0.6rem;
-        position: relative;
-        display: inline-block;
-        border: 1px solid transparent;
-    }
-
-    .nav-links a:hover {
-        color: var(--cp-yellow);
-        background: rgba(252, 238, 10, 0.1);
-        border-color: rgba(252, 238, 10, 0.3);
-        clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
-    }
-
-    .nav-social {
-        font-size: 1.2rem;
-        color: var(--cp-blue) !important;
-        padding: 0.3rem 0.5rem !important;
-    }
-
-    .nav-social:hover {
-        color: var(--cp-yellow) !important;
-        text-shadow: 0 0 10px var(--cp-yellow);
-    }
-
-    .menu-btn {
-        display: none;
-        background: none;
-        border: 1px solid var(--cp-yellow);
-        color: var(--cp-yellow);
-        padding: 0.4rem 0.8rem;
-        font-size: 1.2rem;
-        cursor: pointer;
-    }
-
-    /* SECTIONS */
-    section { 
-        padding: 5rem 0; 
-        position: relative;
-    }
-
-    .hero { 
-        padding: 7rem 0 5rem 0; 
-    }
-
-    .cyber-badge {
-        display: inline-block;
-        background: var(--cp-red);
-        color: #fff;
-        font-size: 0.75rem;
-        font-weight: 800;
-        letter-spacing: 2px;
-        padding: 0.2rem 0.8rem;
-        text-transform: uppercase;
-        clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
-        margin-bottom: 1rem;
-        box-shadow: 0 0 10px var(--cp-red);
-    }
-
-    .hero-title {
-        font-size: clamp(2.5rem, 6vw, 4.2rem);
-        font-weight: 900;
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: #fff;
-        text-shadow: 2px 2px 0px var(--cp-red), -2px -2px 0px var(--cp-blue);
-    }
-
-    .hero-subtitle {
-        font-size: 1.5rem;
-        color: var(--cp-yellow);
-        margin-bottom: 1.5rem;
-        font-weight: 700;
-        letter-spacing: 1px;
-    }
-
-    .section-title {
-        font-size: 2rem;
-        margin-bottom: 3rem;
-        position: relative;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .section-title::before {
-        content: "";
-        display: inline-block;
-        width: 12px;
-        height: 24px;
-        background: var(--cp-red);
-    }
-
-    .section-title::after {
-        content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-        width: 80px;
-        height: 3px;
-        background: var(--cp-yellow);
-        box-shadow: 0 0 10px var(--cp-yellow);
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-        gap: 2rem;
-    }
-
-    .card {
-        background: var(--cp-dark-card);
-        padding: 2rem;
-        border: 1px solid var(--cp-border);
-        border-left: 3px solid var(--cp-yellow);
-        transition: var(--transition);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        backdrop-filter: blur(10px);
-        position: relative;
-        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
-    }
-
-    .card:hover {
-        border-color: var(--cp-blue);
-        border-left-color: var(--cp-red);
-        box-shadow: 0 0 25px rgba(0, 243, 255, 0.25);
-        transform: translateY(-4px);
-    }
-
-    .tag {
-        background: rgba(0, 243, 255, 0.1);
-        color: var(--cp-blue);
-        padding: 0.2rem 0.6rem;
-        border: 1px solid rgba(0, 243, 255, 0.3);
-        font-size: 0.75rem;
-        font-weight: 700;
-        margin-right: 5px;
-        display: inline-block;
-        margin-bottom: 5px;
-        text-transform: uppercase;
-    }
-
-    .experience-card {
-        border-left: 4px solid var(--cp-red);
-    }
-
-    .experience-list {
-        list-style: none;
-        margin-top: 1.2rem;
-    }
-
-    .experience-list li {
-        margin-bottom: 0.8rem;
-        color: var(--cp-text);
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-    }
-
-    .experience-list li i {
-        color: var(--cp-yellow);
-        margin-top: 4px;
-    }
-
-    .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .skill-card {
-        padding: 1.8rem;
-        border: 1px solid var(--cp-border);
-        background: var(--cp-dark-card);
-        backdrop-filter: blur(10px);
-        transition: var(--transition);
-        border-top: 3px solid var(--cp-blue);
-    }
-
-    .skill-card:hover {
-        border-color: var(--cp-yellow);
-        border-top-color: var(--cp-red);
-        box-shadow: 0 0 20px rgba(252, 238, 10, 0.2);
-        transform: translateY(-3px);
-    }
-
-    .skill-card i {
-        font-size: 2.2rem;
-        color: var(--cp-yellow);
-        margin-bottom: 1rem;
-    }
-
-    .skill-card h4 {
-        margin-bottom: 0.8rem;
-        color: #fff;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .skill-card ul {
-        list-style: none;
-        color: var(--cp-muted);
-        font-size: 0.9rem;
-    }
-
-    .skill-card ul li {
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .skill-card ul li::before {
-        content: ">";
-        color: var(--cp-red);
-        font-weight: bold;
-    }
-
-    .btn {
-        padding: 0.8rem 1.8rem;
-        font-weight: 800;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        cursor: pointer;
-        transition: var(--transition);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.85rem;
-        clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
-        border: none;
-    }
-
-    .btn-primary { 
-        background: var(--cp-yellow); 
-        color: #000; 
-        box-shadow: 0 0 15px rgba(252, 238, 10, 0.4);
-    }
-    .btn-primary:hover { 
-        background: #fff; 
-        box-shadow: 0 0 25px rgba(252, 238, 10, 0.8);
-        transform: translateY(-2px);
-    }
-
-    .btn-outline { 
-        border: 2px solid var(--cp-blue); 
-        color: var(--cp-blue); 
-        background: transparent;
-    }
-    .btn-outline:hover { 
-        background: var(--cp-blue); 
-        color: #000; 
-        box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
-        transform: translateY(-2px);
-    }
-
-    .reveal {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal.active {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    footer {
-        padding: 2.5rem 0;
-        text-align: center;
-        border-top: 2px solid var(--cp-red);
-        color: var(--cp-muted);
-        background: rgba(5, 6, 8, 0.95);
-    }
-
-    /* Responsive Mobile Styles */
-    @media (max-width: 992px) {
-        .menu-btn { display: block; }
-        .nav-links {
-            display: none;
-            flex-direction: column;
-            position: absolute;
-            top: 100%;
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: #07070d;
+            color: #00f3ff;
+            overflow-x: hidden;
+        }
+
+        /* Background Animated Canvas */
+        #cyber-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Scanlines Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
             left: 0;
             width: 100%;
-            background: rgba(8, 8, 12, 0.98);
-            padding: 1.5rem;
-            border-bottom: 2px solid var(--cp-yellow);
-            gap: 1rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg,
+                rgba(255, 0, 0, 0.03),
+                rgba(0, 255, 0, 0.01),
+                rgba(0, 0, 255, 0.03)
+            );
+            background-size: 100% 4px, 6px 100%;
         }
-        .nav-links.active { display: flex; }
-    }
+
+        /* Cyberpunk Glitch & Glow Effects */
+        .cyber-tile {
+            background: rgba(15, 15, 28, 0.85);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .cyber-tile:hover {
+            border-color: #00f3ff;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.25), inset 0 0 10px rgba(0, 243, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .cyber-tile-yellow {
+            background: rgba(18, 18, 20, 0.85);
+            border: 1px solid rgba(252, 238, 10, 0.3);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 15px rgba(252, 238, 10, 0.05);
+        }
+
+        .cyber-tile-yellow:hover {
+            border-color: #fcee0a;
+            box-shadow: 0 0 20px rgba(252, 238, 10, 0.3);
+        }
+
+        /* Cyberpunk Button */
+        .cyber-btn {
+            position: relative;
+            background: transparent;
+            color: #00f3ff;
+            border: 1px solid #00f3ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.2s ease;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+
+        .cyber-btn:hover {
+            background: #00f3ff;
+            color: #0a0a12;
+            box-shadow: 0 0 15px #00f3ff;
+            font-weight: 700;
+        }
+
+        .cyber-btn-yellow {
+            color: #fcee0a;
+            border-color: #fcee0a;
+        }
+
+        .cyber-btn-yellow:hover {
+            background: #fcee0a;
+            color: #0a0a12;
+            box-shadow: 0 0 15px #fcee0a;
+        }
+
+        .cyber-btn-magenta {
+            color: #ff0055;
+            border-color: #ff0055;
+        }
+
+        .cyber-btn-magenta:hover {
+            background: #ff0055;
+            color: #fff;
+            box-shadow: 0 0 15px #ff0055;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00f3ff;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff0055;
+        }
+
+        /* Custom Modal Backdrop Blur */
+        .modal-backdrop {
+            background: rgba(5, 5, 10, 0.85);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Toggle switch style */
+        .toggle-checkbox:checked {
+            right: 0;
+            background-color: #00f3ff;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: rgba(0, 243, 255, 0.2);
+            border-color: #00f3ff;
+        }
     </style>
 </head>
-<body>
+<body class="relative min-h-screen text-gray-200 selection:bg-cyber-yellow selection:text-black">
 
-    <!-- CANVASES DE FOND ET OVERLAY CRT -->
-    <canvas id="cyberpunk-canvas"></canvas>
+    <canvas id="cyber-canvas"></canvas>
     <div class="scanlines"></div>
 
-    <div id="cyber-boot-overlay">
-        <canvas id="matrix-canvas"></canvas>
-        <div class="boot-content">
-            <div class="boot-header">
-                <span><i class="fas fa-terminal"></i> SYSTEM BOOT PROTOCOL v4.8</span>
-                <span id="boot-status-text">INITIALIZING...</span>
+    <div id="boot-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black p-4 font-mono text-xs sm:text-sm">
+        <div class="w-full max-w-2xl border border-cyber-yellow bg-black/90 p-6 shadow-[0_0_30px_rgba(252,238,10,0.3)] rounded-sm">
+            <div class="flex justify-between items-center border-b border-cyber-yellow/40 pb-2 mb-4">
+                <span class="text-cyber-yellow font-bold tracking-widest"><i class="fa-solid font-bold fa-terminal mr-2"></i>CYBER MATRIX OS v4.0.8</span>
+                <span class="text-xs text-cyber-yellow/60">SYS_AUTH_OK</span>
             </div>
-            <div class="boot-terminal" id="boot-terminal-log"></div>
             
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" id="boot-progress-fill"></div>
+            <div id="terminal-logs" class="h-48 overflow-y-auto space-y-1 mb-4 text-cyan-400/90 scrollbar-none font-mono">
+                <div>[SYSTEM] Initializing Quantum Core...</div>
             </div>
 
-            <div class="enter-btn-container">
-                <button class="boot-enter-btn" id="boot-enter-btn">
-                    <i class="fas fa-shield-halved"></i> ACCÈS AUTORISÉ // ACCÉDER AU SYSTÈME
+            <div class="w-full bg-gray-900 h-2 mb-4 border border-cyber-yellow/30 relative overflow-hidden">
+                <div id="boot-progress" class="bg-cyber-yellow h-full w-0 transition-all duration-300 shadow-[0_0_10px_#fcee0a]"></div>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+                <span id="boot-status" class="text-gray-400">CONNEXION AU SERVEUR SISR...</span>
+                <button id="skip-boot-btn" onclick="completeBoot()" class="cyber-btn cyber-btn-yellow px-4 py-2 text-xs font-bold">
+                    ACCÉDER AU SYSTÈME <i class="fa-solid fa-angles-right ml-1"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- HEADER / NAVIGATION -->
-    <header>
-        <div class="container navbar">
-            <div class="logo">ENZO CECCARELLI</div>
-            <button class="menu-btn" id="menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
-            <nav>
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#accueil">Accueil</a></li>
-                    <li><a href="#apropos">À propos</a></li>
-                    <li><a href="#experience">Expérience</a></li>
-                    <li><a href="#competences">Compétences</a></li>
-                    <li><a href="#projets">Projets</a></li>
-                    <li><a href="#epreuve-e4">Épreuve E4</a></li>
-                    <li><a href="#veille">Veille Tech</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <li><a href="https://www.linkedin.com/in/enzo-ceccarelli-891436324" target="_blank" class="nav-social" title="Mon LinkedIn"><i class="fab fa-linkedin"></i></a></li>
-                    <li><a href="https://github.com/votre-pseudo-github" target="_blank" class="nav-social" title="Mon GitHub"><i class="fab fa-github"></i></a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div class="relative z-20">
+        <nav class="fixed top-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-md border-b border-cyber-cyan/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Logo / Brand -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-cyber-cyan/10 border border-cyber-cyan flex items-center justify-center text-cyber-cyan font-bold text-lg shadow-[0_0_10px_rgba(0,243,255,0.4)]">
+                            E
+                        </div>
+                        <a href="#hero" class="text-lg font-bold tracking-widest text-white hover:text-cyber-cyan transition-colors">
+                            ENZO<span class="text-cyber-yellow">.CECCARELLI</span>
+                            <span class="text-xs block text-cyber-cyan font-normal tracking-normal">BTS SIO SISR</span>
+                        </a>
+                    </div>
 
-    <main>
-        <section id="accueil" class="hero">
-            <div class="container reveal">
-                <span class="cyber-badge">System Status: Online</span>
-                <h1 class="hero-title">Enzo Ceccarelli</h1>
-                <p class="hero-subtitle">// BTS SIO Option SISR</p>
-                <p style="max-width: 680px; font-size: 1.1rem; color: var(--cp-text);">
-                    Alternant au sein du <strong style="color:var(--cp-yellow);">3ᵉ Régiment d'Hélicoptères de Combat (3RHC)</strong> à Étain. Spécialisé dans l'administration des infrastructures réseaux, le support technique N1/N2 et le hardening de systèmes.
+                    <!-- Desktop Menu -->
+                    <div class="hidden md:flex items-center space-x-6 text-sm">
+                        <a href="#about" class="hover:text-cyber-yellow transition-colors font-medium">// A PROPOS</a>
+                        <a href="#skills" class="hover:text-cyber-yellow transition-colors font-medium">// COMPÉTENCES</a>
+                        <a href="#projects" class="hover:text-cyber-yellow transition-colors font-medium">// PROJETS SISR</a>
+                        <a href="#experience" class="hover:text-cyber-yellow transition-colors font-medium">// PARCOURS</a>
+                        <a href="#contact" class="cyber-btn px-4 py-1.5 text-xs font-semibold">ME CONTACTER</a>
+                    </div>
+
+                    <!-- Mobile Hamburger Button -->
+                    <div class="md:hidden">
+                        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-cyber-cyan hover:text-cyber-yellow focus:outline-none p-2">
+                            <i class="fa-solid fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Overlay -->
+            <div id="mobile-menu" class="hidden md:hidden bg-black/95 border-b border-cyber-cyan/30 px-4 pt-2 pb-6 space-y-3">
+                <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-yellow">// A PROPOS</a>
+                <a href="#skills" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-yellow">// COMPÉTENCES</a>
+                <a href="#projects" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-yellow">// PROJETS SISR</a>
+                <a href="#experience" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-yellow">// PARCOURS</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="inline-block mt-2 cyber-btn px-4 py-2 text-xs">ME CONTACTER</a>
+            </div>
+        </nav>
+
+        <main class="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+            <section id="hero" class="min-h-[75vh] flex flex-col justify-center items-start relative">
+                <div class="inline-block px-3 py-1 mb-4 bg-cyber-yellow/10 border border-cyber-yellow text-cyber-yellow text-xs tracking-widest uppercase">
+                    <i class="fa-solid fa-shield-halved mr-2"></i> Spécialité SISR : Solutions d'Infrastructures, Systèmes et Réseaux
+                </div>
+                
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-4">
+                    ENZO <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-blue-400 to-cyber-yellow">CECCARELLI</span>
+                </h1>
+
+                <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
+                    Étudiant diplômé en <strong class="text-cyber-cyan">BTS SIO SISR</strong>. Passionné par l'administration système, la virtualisation, la sécurité des réseaux et le déploiement d'architectures cloud.
                 </p>
-            </div>
-        </section>
 
-        <!-- A PROPOS -->
-        <section id="apropos">
-            <div class="container">
-                <h2 class="section-title">À propos de moi</h2>
-                <div class="grid">
-                    <div class="card reveal">
-                        <div>
-                            <h3 style="color:#fff; text-transform:uppercase;">Mon Parcours</h3>
-                            <p style="margin-top: 12px; color: var(--cp-muted);">
-                                Après un parcours initial en Gestion-Finance, j'ai choisi de me réorienter vers ma passion : les systèmes & réseaux informatiques. Mon objectif professionnel est d'évoluer vers une <strong style="color:var(--cp-blue)">Licence / Master en Cybersécurité</strong>.
-                            </p>
-                        </div>
-                        <div style="margin-top: 20px;">
-                            <a href="CV_Enzo_Ceccarelli.pdf" target="_blank" class="btn btn-outline">
-                                <i class="fas fa-file-pdf"></i> Télécharger mon CV
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card reveal">
-                        <div>
-                            <h3 style="color:#fff; text-transform:uppercase;">Informations Système</h3>
-                            <p style="margin-top: 12px;"><strong>Âge :</strong> 25 ans</p>
-                            <p><strong>Localisation :</strong> Réhon / Metz</p>
-                            <p><strong>Centre de Formation :</strong> Campus MEWO Metz</p>
-                            <p><strong>Unité d'accueil :</strong> 3RHC Étain (Alternance)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXPERIENCE PROFESSIONNELLE (3RHC) -->
-        <section id="experience">
-            <div class="container">
-                <h2 class="section-title">Expérience en Alternance</h2>
-                <div class="card reveal experience-card">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
-                        <div>
-                            <h3 style="color:#fff; text-transform:uppercase;">Technicien Informatique & Réseaux</h3>
-                            <p style="color: var(--cp-yellow); font-weight: 700;">3ᵉ Régiment d'Hélicoptères de Combat (3RHC) — Étain</p>
-                        </div>
-                        <span class="tag" style="background: rgba(255,0,60,0.15); color: var(--cp-red); border-color: var(--cp-red);">Support & Parc Militaire</span>
-                    </div>
-
-                    <p style="margin-top: 15px; font-size: 0.95rem; color: var(--cp-muted);">
-                        Au sein de la cellule informatique du régiment, j'assure le maintien en condition opérationnelle (MCO) du parc et l'assistance technique auprès des utilisateurs.
-                    </p>
-
-                    <ul class="experience-list">
-                        <li><i class="fas fa-terminal"></i> <span><strong>Support Helpdesk N1/N2 :</strong> Diagnostic, dépannage et résolution d'incidents matériels/logiciels.</span></li>
-                        <li><i class="fas fa-terminal"></i> <span><strong>Gestion du Parc Informatique :</strong> Suivi de l'inventaire, masterisation, installation et déploiement de postes.</span></li>
-                        <li><i class="fas fa-terminal"></i> <span><strong>Contrôle des Accès :</strong> Réinitialisation de comptes Active Directory, gestion des privilèges et groupes.</span></li>
-                        <li><i class="fas fa-terminal"></i> <span><strong>Configurations Spécifiques :</strong> Préparation sur-mesure de postes métiers et flottes de tablettes tactiques.</span></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- COMPETENCES SISR -->
-        <section id="competences">
-            <div class="container">
-                <h2 class="section-title">Compétences Techniques</h2>
-                <div class="skills-grid">
-                    <div class="skill-card reveal">
-                        <i class="fas fa-network-wired"></i>
-                        <h4>Réseaux & Commutateurs</h4>
-                        <ul>
-                            <li>Cisco Packet Tracer</li>
-                            <li>VLANs, Trunking, Inter-VLAN</li>
-                            <li>ACL & Sécurité d'accès</li>
-                            <li>Routage statique & dynamique</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card reveal">
-                        <i class="fas fa-server"></i>
-                        <h4>Admin Systèmes</h4>
-                        <ul>
-                            <li>Windows Server (AD DS, DNS, DHCP)</li>
-                            <li>Linux (Ubuntu Server, Debian)</li>
-                            <li>GPO & Directives de Sécurité</li>
-                            <li>Hardening d'OS</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card reveal">
-                        <i class="fas fa-cubes"></i>
-                        <h4>Virtualisation & Cloud</h4>
-                        <ul>
-                            <li>VMware ESXi / Workstation</li>
-                            <li>VirtualBox</li>
-                            <li>vSwitches & Snapshots</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card reveal">
-                        <i class="fas fa-shield-halved"></i>
-                        <h4>Sécurité & Scripting</h4>
-                        <ul>
-                            <li>Analyse de trames (Wireshark)</li>
-                            <li>Audit & Scans (Nmap)</li>
-                            <li>Scripting PowerShell & Bash</li>
-                            <li>Recommandations ANSSI</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="projets">
-            <div class="container">
-                <h2 class="section-title">Projets & Travaux Pratiques</h2>
-                <div class="grid">
-
-                    <!-- TP 1 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">VMware</span>
-                                <span class="tag">pfSense</span>
-                                <span class="tag">WordPress</span>
-                            </div>
-                            <h3 style="color:#fff;">TP Parc informatique (BYFECT v4)</h3>
-                            <p style="margin-top: 10px; font-size: 0.9rem; color: var(--cp-muted);">Déploiement complet d'une infrastructure réseau sous VMware pour l'entreprise BYFECT v4.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--cp-muted); list-style: square; padding-left: 15px;">
-                                <li>Pare-feu pfSense avec règles WAN/LAN.</li>
-                                <li>Serveur Web Apache2 / Nextcloud / WordPress.</li>
-                                <li>Interconnexion et routage des postes Ubuntu.</li>
-                            </ul>
-                        </div>
-                        <div style="margin-top: 20px;">
-                            <a href="TP BYFECT v4 Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Ouvrir la documentation
-                            </a>
-                        </div>
-                    </article>
-
-                    <!-- TP 2 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">pfSense</span>
-                                <span class="tag">Firewall</span>
-                                <span class="tag">Security</span>
-                            </div>
-                            <h3 style="color:#fff;">TP Pare-feu pfSense</h3>
-                            <p style="margin-top: 10px; font-size: 0.9rem; color: var(--cp-muted);">Installation, initialisation et règles de filtrage du pare-feu open source pfSense.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--cp-muted); list-style: square; padding-left: 15px;">
-                                <li>Adressage des interfaces WAN / LAN.</li>
-                                <li>Configuration du WebGUI d'administration.</li>
-                                <li>Règles de routage et filtrage d'accès.</li>
-                            </ul>
-                        </div>
-                        <div style="margin-top: 20px;">
-                            <a href="TP PFSENSE Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Ouvrir la documentation
-                            </a>
-                        </div>
-                    </article>
-
-                    <!-- TP 3 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">LAMP</span>
-                                <span class="tag">MySQL</span>
-                                <span class="tag">Apache</span>
-                            </div>
-                            <h3 style="color:#fff;">TP phpMyAdmin & WordPress</h3>
-                            <p style="margin-top: 10px; font-size: 0.9rem; color: var(--cp-muted);">Déploiement et administration d'une pile Web LAMP complète sur Ubuntu Server.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--cp-muted); list-style: square; padding-left: 15px;">
-                                <li>VirtualHosts Apache2.</li>
-                                <li>Gestion SGBD via phpMyAdmin.</li>
-                                <li>Déploiement sécurisé du CMS WordPress.</li>
-                            </ul>
-                        </div>
-                        <div style="margin-top: 20px;">
-                            <a href="TP PHPMYADMIN WordPress.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Ouvrir la documentation
-                            </a>
-                        </div>
-                    </article>
-
-                    <!-- TP 4 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">GLPI v10</span>
-                                <span class="tag">Gestion de Parc</span>
-                                <span class="tag">ITSM</span>
-                            </div>
-                            <h3 style="color:#fff;">TP Serveur GLPI v10</h3>
-                            <p style="margin-top: 10px; font-size: 0.9rem; color: var(--cp-muted);">Mise en place d'un outil ITSM pour l'inventaire automatique et le suivi Helpdesk.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--cp-muted); list-style: square; padding-left: 15px;">
-                                <li>Installation dépendances PHP & MariaDB.</li>
-                                <li>Droits, groupes et profils d'assistance.</li>
-                                <li>Remontées automatiques des agents GLPI.</li>
-                            </ul>
-                        </div>
-                        <div style="margin-top: 20px;">
-                            <a href="TP serveur GLPI Installation.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Ouvrir la documentation
-                            </a>
-                        </div>
-                    </article>
-
-                    <!-- TP 5 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">OPNsense</span>
-                                <span class="tag">Hardening</span>
-                                <span class="tag">Réseau</span>
-                            </div>
-                            <h3 style="color:#fff;">TP Installation OPNsense</h3>
-                            <p style="margin-top: 10px; font-size: 0.9rem; color: var(--cp-muted);">Mise en service du pare-feu/routeur open-source OPNsense.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--cp-muted); list-style: square; padding-left: 15px;">
-                                <li>Affectation interfaces LAN/WAN.</li>
-                                <li>NAT et règles de filtrage.</li>
-                                <li>Benchmark avec pfSense.</li>
-                            </ul>
-                        </div>
-                        <div style="margin-top: 20px;">
-                            <a href="TP_OPNsense.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Ouvrir la documentation
-                            </a>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- EPREUVE E4 -->
-        <section id="epreuve-e4">
-            <div class="container">
-                <h2 class="section-title">Portefeuille de Compétences (Épreuve E4)</h2>
-                <div class="card reveal" style="border-left-color: var(--cp-blue);">
-                    <h3 style="color:#fff; text-transform:uppercase;">Tableau de Synthèse Épreuve E5 / E4</h3>
-                    <p style="margin: 1rem 0; color: var(--cp-muted);">
-                        Récapitulatif officiel de mes réalisations professionnelles au <strong>3RHC</strong> et au <strong>Campus MEWO</strong> (Session 2026), articulées selon le référentiel BTS SIO SISR (gestion des accès, réponse aux incidents, maintenance opérationnelle).
-                    </p>
-                    <a href="BTS_SIO_Annexe_VI.5_Epreuve E5 - Tableau de synthe_se_2026.xlsx - Tableau de synthèse Épreuve E5.pdf" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-file-pdf"></i> Télécharger le Tableau de Synthèse 2026
+                <div class="flex flex-wrap gap-4">
+                    <a href="#projects" class="cyber-btn cyber-btn-yellow px-6 py-3 text-sm font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-folder-open"></i> VOIR LES PROJETS
+                    </a>
+                    <a href="#contact" class="cyber-btn px-6 py-3 text-sm font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-envelope"></i> PRENDRE CONTACT
                     </a>
                 </div>
-            </div>
-        </section>
 
-        <!-- VEILLE TECHNOLOGIQUE -->
-        <section id="veille">
-            <div class="container">
-                <h2 class="section-title">Veille Technologique</h2>
-                <div class="grid">
-                    <div class="card reveal">
-                        <h3 style="color:#fff;"><i class="fas fa-rss" style="color:var(--cp-yellow); margin-right:8px;"></i> Méthodologie & Sources</h3>
-                        <p style="margin-top:10px; color:var(--cp-muted);">Processus automatisé pour l'anticipation des failles systèmes et réseaux :</p>
-                        <ul style="margin-top: 10px; font-size: 0.9rem; color: var(--cp-muted); padding-left: 20px;">
-                            <li><strong>Feedly :</strong> Agrégation de flux RSS spécialisés.</li>
-                            <li><strong>Alertes Officiel :</strong> CERT-FR & ANSSI.</li>
-                            <li><strong>Presse IT :</strong> IT-Connect, Le Monde Informatique, ZDNet.</li>
+                <!-- Stats summary grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 w-full max-w-4xl">
+                    <div class="cyber-tile p-4 border-l-4 border-l-cyber-cyan">
+                        <div class="text-2xl font-bold text-white">BAC +2</div>
+                        <div class="text-xs text-gray-400">BTS SIO SISR</div>
+                    </div>
+                    <div class="cyber-tile p-4 border-l-4 border-l-cyber-yellow">
+                        <div class="text-2xl font-bold text-white">SysAdmin</div>
+                        <div class="text-xs text-gray-400">Linux & Windows Server</div>
+                    </div>
+                    <div class="cyber-tile p-4 border-l-4 border-l-cyber-magenta">
+                        <div class="text-2xl font-bold text-white">Réseaux</div>
+                        <div class="text-xs text-gray-400">Cisco, VLANs, VPN</div>
+                    </div>
+                    <div class="cyber-tile p-4 border-l-4 border-l-green-400">
+                        <div class="text-2xl font-bold text-white">Virtu</div>
+                        <div class="text-xs text-gray-400">Proxmox, VMware, Docker</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-wider">// 01. À PROPOS</h2>
+                    <div class="h-px bg-cyber-cyan/30 flex-grow"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="cyber-tile p-6 md:col-span-2 space-y-4">
+                        <p class="text-gray-300 leading-relaxed">
+                            Mon parcours au sein du <strong class="text-cyber-yellow">BTS SIO (Services Informatiques aux Organisations)</strong> option SISR m'a permis de développer une expertise solide dans la gestion, le maintien en condition opérationnelle et la sécurisation des infrastructures informatiques.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            Intervenant aussi bien sur des environnements serveur (Active Directory, services DNS/DHCP, baies de stockage) que sur la partie commutateurs et pare-feux, je cherche continuellement à optimiser la qualité de service et la haute disponibilité des infrastructures.
+                        </p>
+                        <div class="pt-2 flex flex-wrap gap-2">
+                            <span class="px-2.5 py-1 bg-cyber-cyan/10 border border-cyber-cyan/40 text-cyber-cyan text-xs">Analyse Réseau</span>
+                            <span class="px-2.5 py-1 bg-cyber-cyan/10 border border-cyber-cyan/40 text-cyber-cyan text-xs">Supervision Zabbix</span>
+                            <span class="px-2.5 py-1 bg-cyber-cyan/10 border border-cyber-cyan/40 text-cyber-cyan text-xs">Scripting Bash & PowerShell</span>
+                        </div>
+                    </div>
+
+                    <div class="cyber-tile-yellow p-6 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-cyber-yellow font-bold text-lg mb-2"><i class="fa-solid fa-circle-info mr-2"></i>FICHE SIGNALÉTIQUE</h3>
+                            <ul class="text-sm space-y-2 text-gray-300">
+                                <li><strong class="text-white">Nom :</strong> Enzo Ceccarelli</li>
+                                <li><strong class="text-white">Diplôme :</strong> BTS SIO Option SISR</li>
+                                <li><strong class="text-white">Localisation :</strong> France</li>
+                                <li><strong class="text-white">Statut :</strong> Disponible / Recherche d'opportunités</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-cyber-yellow/20">
+                            <span class="inline-flex items-center text-xs text-green-400">
+                                <span class="w-2 h-2 rounded-full bg-green-400 mr-2 animate-ping"></span> Système En Ligne
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-wider">// 02. COMPÉTENCES TECHNIQUES</h2>
+                    <div class="h-px bg-cyber-cyan/30 flex-grow"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Systems -->
+                    <div class="cyber-tile p-6">
+                        <div class="text-cyber-cyan text-2xl mb-3"><i class="fa-solid fa-server"></i></div>
+                        <h3 class="text-lg font-bold text-white mb-3">Systèmes & Virtualisation</h3>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-center gap-2"><i class="fa-brands fa-windows text-cyber-yellow"></i> Windows Server (AD DS, GPO, DNS, DHCP)</li>
+                            <li class="flex items-center gap-2"><i class="fa-brands fa-linux text-cyber-yellow"></i> Linux (Debian, Ubuntu Server, CentOS)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-cubes text-cyber-yellow"></i> Hyperviseurs (Proxmox VE, VMware ESXi)</li>
+                            <li class="flex items-center gap-2"><i class="fa-brands fa-docker text-cyber-yellow"></i> Containerisation (Docker, Portainer)</li>
                         </ul>
                     </div>
-                    <div class="card reveal">
-                        <h3 style="color:#fff;"><i class="fas fa-shield-halved" style="color:var(--cp-red); margin-right:8px;"></i> Sujet : Sécurisation des Accès & Hardening</h3>
-                        <div style="margin-top: 10px;">
-                            <span class="tag">Privilèges Moindres</span>
-                            <span class="tag">MFA / ANSSI</span>
-                            <span class="tag">Hardening</span>
-                            <span class="tag">Patch Management</span>
-                        </div>
-                        <p style="margin-top:15px; font-size: 0.9rem; color: var(--cp-muted);">
-                            Veille axée sur le <strong>durcissement des systèmes (Windows/Linux)</strong> et le <strong>contrôle des accès</strong>. Étude continue du principe du moindre privilège, du déploiement du MFA et du suivi des vulnérabilités critiques (Zero-Day & Correctifs).
-                        </p>
+
+                    <!-- Networks -->
+                    <div class="cyber-tile p-6">
+                        <div class="text-cyber-yellow text-2xl mb-3"><i class="fa-solid fa-network-wired"></i></div>
+                        <h3 class="text-lg font-bold text-white mb-3">Réseaux & Sécurité</h3>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-diagram-project text-cyber-cyan"></i> Commutation & Routage Cisco (VLAN, Trunk)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-shield-cat text-cyber-cyan"></i> Pare-Feu & VPN (pfSense, OpenVPN, IPsec)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-wifi text-cyber-cyan"></i> Protocoles (TCP/IP, SSH, TLS/SSL, OSPF)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-lock text-cyber-cyan"></i> Wireshark & Audit de trafic</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tools & Automation -->
+                    <div class="cyber-tile p-6">
+                        <div class="text-cyber-magenta text-2xl mb-3"><i class="fa-solid fa-code"></i></div>
+                        <h3 class="text-lg font-bold text-white mb-3">Outillage & Scripting</h3>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-terminal text-cyber-magenta"></i> Bash / Shell Scripting</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-scroll text-cyber-magenta"></i> Automation PowerShell</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-chart-line text-cyber-magenta"></i> Supervision (Zabbix, GLPI)</li>
+                            <li class="flex items-center gap-2"><i class="fa-brands fa-git-alt text-cyber-magenta"></i> Gestion de versioning Git</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- CONTACT -->
-        <section id="contact">
-            <div class="container">
-                <h2 class="section-title">Canal Sécurisé // Contact</h2>
-                <div class="reveal" style="max-width: 600px; margin: 0 auto;">
-                    <form action="https://formspree.io/f/manrdvlg" method="POST" style="display: flex; flex-direction: column; gap: 1.2rem;">
-                        <input type="text" name="name" placeholder="Nom / Prénom" required style="padding: 14px; border-radius: 0; border: 1px solid var(--cp-border); background: rgba(8,8,12,0.9); color: #fff; font-family:inherit;">
-                        <input type="email" name="email" placeholder="Adresse Email" required style="padding: 14px; border-radius: 0; border: 1px solid var(--cp-border); background: rgba(8,8,12,0.9); color: #fff; font-family:inherit;">
-                        <textarea name="message" placeholder="Votre message..." rows="5" required style="padding: 14px; border-radius: 0; border: 1px solid var(--cp-border); background: rgba(8,8,12,0.9); color: #fff; font-family:inherit;"></textarea>
+            <section id="projects" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-wider">// 03. PROJETS SISR</h2>
+                    <div class="h-px bg-cyber-cyan/30 flex-grow"></div>
+                </div>
 
-                        <!-- Cloudflare Turnstile CAPTCHA Widget -->
-                        <div class="cf-turnstile" data-sitekey="0x4AAAAAAEz0-lJH6asrDRL1" data-theme="dark"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Project 1 -->
+                    <div class="cyber-tile p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs px-2 py-0.5 border border-cyber-cyan text-cyber-cyan uppercase font-bold">Infrastructures</span>
+                                <span class="text-xs text-gray-400">Projet BTS</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Déploiement d'une infrastructure Active Directory & Redondance DNS</h3>
+                            <p class="text-sm text-gray-300 mb-4">
+                                Mise en place d'un domaine Active Directory sous Windows Server avec contrôleur de domaine secondaire, stratégies de groupe (GPO) sécurisées et déploiement centralisé de paquets logiciels.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-4 border-t border-gray-800">
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Windows Server</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Active Directory</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">GPO</span>
+                        </div>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary" style="justify-content: center;">Transmettre le message</button>
-                    </form>
+                    <!-- Project 2 -->
+                    <div class="cyber-tile p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs px-2 py-0.5 border border-cyber-yellow text-cyber-yellow uppercase font-bold">Sécurité / Réseau</span>
+                                <span class="text-xs text-gray-400">Projet BTS</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Architecture Réseau Sécurisée avec pfSense & VLANs</h3>
+                            <p class="text-sm text-gray-300 mb-4">
+                                Segmentation du réseau d'entreprise par VLANs (Administration, Production, Invités), règles de filtrage sur pare-feu pfSense, et mise en place d'un tunnel VPN OpenVPN pour accès distants.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-4 border-t border-gray-800">
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">pfSense</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Cisco IOS</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">VLANs / Trunk</span>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="cyber-tile p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs px-2 py-0.5 border border-cyber-magenta text-cyber-magenta uppercase font-bold">Supervision</span>
+                                <span class="text-xs text-gray-400">Stage / TP</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Plateforme de Supervision Zabbix & Gestion d'Incidents GLPI</h3>
+                            <p class="text-sm text-gray-300 mb-4">
+                                Installation d'un serveur de supervision Zabbix sous Debian avec agents SNMP et alertes automatisées. Interconnexion avec GLPI pour la remontée automatique de tickets.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-4 border-t border-gray-800">
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Debian</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Zabbix</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">GLPI / SNMP</span>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="cyber-tile p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs px-2 py-0.5 border border-green-400 text-green-400 uppercase font-bold">Virtualisation</span>
+                                <span class="text-xs text-gray-400">Projet Personnel</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Cluster Proxmox VE & Conteneurs Docker</h3>
+                            <p class="text-sm text-gray-300 mb-4">
+                                Configuration d'un homelab de virtualisation sous Proxmox VE hébergeant divers services Web, proxy inverse Traefik et conteneurs d'outils réseau.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-4 border-t border-gray-800">
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Proxmox VE</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Docker</span>
+                            <span class="text-xs text-gray-400 bg-black/50 px-2 py-1">Reverse Proxy</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-wider">// 04. PARCOURS & EXPÉRIENCES</h2>
+                    <div class="h-px bg-cyber-cyan/30 flex-grow"></div>
+                </div>
+
+                <div class="space-y-6 border-l-2 border-cyber-cyan/40 pl-4 sm:pl-6 ml-2">
+                    <!-- Exp 1 -->
+                    <div class="relative pl-2">
+                        <div class="absolute -left-[23px] sm:-left-[31px] top-1.5 w-4 h-4 rounded-full bg-black border-2 border-cyber-cyan"></div>
+                        <div class="cyber-tile p-5">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
+                                <h3 class="text-lg font-bold text-white">Technicien Informatique & Réseaux (Stage)</h3>
+                                <span class="text-xs text-cyber-yellow bg-cyber-yellow/10 px-2 py-1 rounded border border-cyber-yellow/30 font-semibold w-max mt-1 sm:mt-0">Stage BTS SIO SISR</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mb-3"><i class="fa-solid fa-calendar-days mr-1"></i> Périodes de stage en entreprise</p>
+                            <ul class="list-disc list-inside text-sm text-gray-300 space-y-1">
+                                <li>Assistance utilisateur de niveau 1 & 2 et gestion du parc informatique.</li>
+                                <li>Configuration et intégration de postes de travail sur domaine Active Directory.</li>
+                                <li>Participation à la migration de serveurs et brassage de baies réseaux.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Exp 2 -->
+                    <div class="relative pl-2">
+                        <div class="absolute -left-[23px] sm:-left-[31px] top-1.5 w-4 h-4 rounded-full bg-black border-2 border-cyber-yellow"></div>
+                        <div class="cyber-tile p-5">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
+                                <h3 class="text-lg font-bold text-white">Formation BTS SIO Option SISR</h3>
+                                <span class="text-xs text-cyber-cyan bg-cyber-cyan/10 px-2 py-1 rounded border border-cyber-cyan/30 font-semibold w-max mt-1 sm:mt-0">Diplôme National</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mb-3"><i class="fa-solid fa-graduation-cap mr-1"></i> Formation Post-Bac</p>
+                            <p class="text-sm text-gray-300">
+                                Apprentissage approfondi des architectures réseaux, de la virtualisation, de la cybersécurité des infrastructures et du maintien en condition opérationnelle des systèmes d'information.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="space-y-6 scroll-mt-20">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-wider">// 05. CONTACT</h2>
+                    <div class="h-px bg-cyber-cyan/30 flex-grow"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="cyber-tile p-6 space-y-4">
+                        <h3 class="text-xl font-bold text-cyber-yellow mb-4"><i class="fa-solid fa-paper-plane mr-2"></i>RESTEZ EN CONTACT</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            N'hésitez pas à me contacter pour toute proposition d'opportunité professionnelle, d'échange technique ou de question concernant mes projets.
+                        </p>
+
+                        <div class="space-y-3 pt-4 text-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 bg-cyber-cyan/10 border border-cyber-cyan flex items-center justify-center text-cyber-cyan">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400">Email</div>
+                                    <a href="mailto:enzo.ceccarelli@example.com" class="text-white hover:text-cyber-cyan transition-colors">enzo.ceccarelli@example.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 bg-cyber-yellow/10 border border-cyber-yellow flex items-center justify-center text-cyber-yellow">
+                                    <i class="fa-brands fa-linkedin"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400">LinkedIn</div>
+                                    <a href="#" class="text-white hover:text-cyber-yellow transition-colors">linkedin.com/in/enzo-ceccarelli</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 bg-cyber-magenta/10 border border-cyber-magenta flex items-center justify-center text-cyber-magenta">
+                                    <i class="fa-brands fa-github"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400">GitHub</div>
+                                    <a href="#" class="text-white hover:text-cyber-magenta transition-colors">github.com/enzo-ceccarelli</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form Mockup -->
+                    <div class="cyber-tile p-6">
+                        <form onsubmit="handleContactForm(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs uppercase text-cyber-cyan mb-1">Nom / Entreprise</label>
+                                <input type="text" required class="w-full bg-black/60 border border-cyber-cyan/40 px-3 py-2 text-white text-sm focus:outline-none focus:border-cyber-cyan">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase text-cyber-cyan mb-1">Adresse Email</label>
+                                <input type="email" required class="w-full bg-black/60 border border-cyber-cyan/40 px-3 py-2 text-white text-sm focus:outline-none focus:border-cyber-cyan">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase text-cyber-cyan mb-1">Message</label>
+                                <textarea rows="4" required class="w-full bg-black/60 border border-cyber-cyan/40 px-3 py-2 text-white text-sm focus:outline-none focus:border-cyber-cyan"></textarea>
+                            </div>
+                            <button type="submit" class="cyber-btn cyber-btn-yellow w-full py-2.5 text-xs font-bold">
+                                ENVOYER LE MESSAGE <i class="fa-solid fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-cyber-cyan/20 bg-black/80 py-8 text-center text-xs text-gray-400">
+            <div class="max-w-7xl mx-auto px-4 space-y-2">
+                <p>&copy; 2026 Enzo Ceccarelli - Portfolio BTS SIO SISR. Tous droits réservés.</p>
+                <div class="flex justify-center items-center space-x-4 pt-2">
+                    <button onclick="openCookieModal()" class="hover:text-cyber-cyan underline transition-colors">
+                        <i class="fa-solid fa-cookie-bite mr-1"></i> Gestion des cookies (RGPD / CNIL)
+                    </button>
                 </div>
             </div>
-        </section>
-    </main>
+        </footer>
+    </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; <span id="year"></span> Enzo Ceccarelli — BTS SIO SISR // Cyber Matrix Network</p>
-        <p style="margin-top: 10px; font-size: 1.3rem; display: flex; justify-content: center; gap: 20px;">
-           <a href="https://www.linkedin.com/in/enzo-ceccarelli-891436324" target="_blank" style="color: var(--cp-yellow);" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-           <a href="https://github.com/votre-pseudo-github" target="_blank" style="color: var(--cp-blue);" title="GitHub"><i class="fab fa-github"></i></a>
-        </p>
-    </footer>
+    <div id="cookie-banner" class="fixed inset-0 z-50 hidden modal-backdrop flex items-center justify-center p-4">
+        <div class="w-full max-w-xl bg-black/95 border-2 border-cyber-cyan p-6 shadow-[0_0_40px_rgba(0,243,255,0.3)] relative text-left rounded-none">
+            
+            <!-- Top bar -->
+            <div class="flex justify-between items-center border-b border-cyber-cyan/40 pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-cookie-bite text-cyber-yellow text-xl"></i>
+                    <h3 class="text-lg font-bold text-white tracking-widest uppercase">PROTOCOLE DE COOKIES // RGPD</h3>
+                </div>
+                <span class="text-xs text-cyber-cyan font-mono">[CNIL_COMPLIANT]</span>
+            </div>
+
+            <!-- Description -->
+            <div id="cookie-summary-view" class="space-y-4">
+                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                    Ce site utilise des cookies techniques et de mesure d'audience pour assurer son bon fonctionnement, analyser le trafic et optimiser l'expérience utilisateur conformément aux directives de la CNIL et du RGPD.
+                </p>
+                <p class="text-xs text-gray-400">
+                    Vous pouvez choisir d'accepter tous les cookies, de les refuser ou de personnaliser vos choix en détail.
+                </p>
+
+                <div class="pt-2 flex flex-col sm:flex-row gap-2 justify-end">
+                    <button onclick="customizeCookies()" class="cyber-btn px-4 py-2 text-xs font-semibold order-3 sm:order-1">
+                        <i class="fa-solid fa-sliders mr-1"></i> PERSONNALISER
+                    </button>
+                    <button onclick="rejectAllCookies()" class="cyber-btn cyber-btn-magenta px-4 py-2 text-xs font-semibold order-2">
+                        <i class="fa-solid fa-xmark mr-1"></i> TOUT REFUSER
+                    </button>
+                    <button onclick="acceptAllCookies()" class="cyber-btn cyber-btn-yellow px-4 py-2 text-xs font-semibold order-1 sm:order-3">
+                        <i class="fa-solid fa-check mr-1"></i> TOUT ACCEPTER
+                    </button>
+                </div>
+            </div>
+
+            <!-- Customization View (Hidden initially) -->
+            <div id="cookie-custom-view" class="hidden space-y-4 pt-2">
+                <div class="space-y-3 max-h-60 overflow-y-auto pr-2 scrollbar-none">
+                    
+                    <!-- Essential cookies -->
+                    <div class="cyber-tile p-3 flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-bold text-white flex items-center gap-2">
+                                Cookies Essentiels
+                                <span class="text-[10px] bg-cyber-cyan/20 border border-cyber-cyan text-cyber-cyan px-1.5 py-0.5">Obligatoire</span>
+                            </div>
+                            <div class="text-xs text-gray-400">Nécessaires au fonctionnement de base et à la sécurité de la session.</div>
+                        </div>
+                        <input type="checkbox" checked disabled class="accent-cyber-cyan h-4 w-4">
+                    </div>
+
+                    <!-- Analytics cookies -->
+                    <div class="cyber-tile p-3 flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-bold text-white">Cookies Analytiques & Mesure d'Audience</div>
+                            <div class="text-xs text-gray-400">Permettent de mesurer la fréquentation du portfolio de façon anonyme.</div>
+                        </div>
+                        <input id="cookie-analytics" type="checkbox" class="accent-cyber-cyan h-4 w-4 cursor-pointer">
+                    </div>
+
+                    <!-- Functional / Preference cookies -->
+                    <div class="cyber-tile p-3 flex items-center justify-between">
+                        <div>
+                            <div class="text-sm font-bold text-white">Cookies de Fonctionnalité</div>
+                            <div class="text-xs text-gray-400">Mémorisent l'état des animations et les paramètres d'affichage.</div>
+                        </div>
+                        <input id="cookie-functional" type="checkbox" checked class="accent-cyber-cyan h-4 w-4 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center pt-2 border-t border-cyber-cyan/20">
+                    <button onclick="showSummaryCookies()" class="text-xs text-gray-400 hover:text-white underline">
+                        &laquo; Retour
+                    </button>
+                    <button onclick="saveCustomCookies()" class="cyber-btn cyber-btn-yellow px-4 py-2 text-xs font-semibold">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i> ENREGISTRER MES CHOIX
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-black border border-cyber-cyan p-4 shadow-[0_0_20px_#00f3ff] text-xs font-mono text-cyber-cyan flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-base text-cyber-yellow"></i>
+        <span id="toast-msg">Action effectuée avec succès.</span>
+    </div>
 
     <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Navigation Mobile Toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
-
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-            });
-        });
-
-        // Intersection Observer pour l'animation .reveal
-        const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-        // Matrix Code Rain pour l'overlay de boot
-        const matrixCanvas = document.getElementById('matrix-canvas');
-        const mCtx = matrixCanvas.getContext('2d');
-        let mWidth = matrixCanvas.width = window.innerWidth;
-        let mHeight = matrixCanvas.height = window.innerHeight;
-
-        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*';
-        const alphabet = katakana + latin;
-
-        const fontSize = 16;
-        let columns = Math.floor(mWidth / fontSize);
-        let rainDrops = Array(columns).fill(1);
-
-        window.addEventListener('resize', () => {
-            mWidth = matrixCanvas.width = window.innerWidth;
-            mHeight = matrixCanvas.height = window.innerHeight;
-            columns = Math.floor(mWidth / fontSize);
-            rainDrops = Array(columns).fill(1);
-        });
-
-        function drawMatrix() {
-            mCtx.fillStyle = 'rgba(3, 4, 6, 0.1)';
-            mCtx.fillRect(0, 0, mWidth, mHeight);
-
-            mCtx.fillStyle = '#00ff66';
-            mCtx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                mCtx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-                if (rainDrops[i] * fontSize > mHeight && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
-            }
-        }
-
-        let matrixInterval = setInterval(drawMatrix, 30);
-
-        // Terminal Boot Log & Progress Bar
-        const bootLogs = [
-            { time: "0.001s", status: "SYS_INIT", msg: "Establishing link to ENZO_CECCARELLI_NET..." },
-            { time: "0.142s", status: "AUTH_CHECK", msg: "Bypassing 3RHC security protocol layers..." },
-            { time: "0.289s", status: "NET_CONFIG", msg: "Routing fiber cables (VLAN 10 / WAN Interconnect)..." },
-            { time: "0.450s", status: "DECRYPT", msg: "Unpacking BTS SIO SISR modules & certifications..." },
-            { time: "0.620s", status: "HARDENING", msg: "Checking pfSense & OPNsense firewall rules..." },
-            { time: "0.810s", status: "HARDWARE", msg: "Motherboard nodes online. Fiber optical sync: OK." },
-            { time: "0.980s", status: "SUCCESS", msg: "All system parameters loaded successfully." }
-        ];
-
-        const logContainer = document.getElementById('boot-terminal-log');
-        const progressFill = document.getElementById('boot-progress-fill');
-        const statusText = document.getElementById('boot-status-text');
-        const enterBtn = document.getElementById('boot-enter-btn');
-        const bootOverlay = document.getElementById('cyber-boot-overlay');
-
-        let currentLogIndex = 0;
-        let progress = 0;
-
-        function updateBootSequence() {
-            if (currentLogIndex < bootLogs.length) {
-                const log = bootLogs[currentLogIndex];
-                const line = document.createElement('div');
-                line.className = 'boot-line';
-                line.innerHTML = `<span class="time">[${log.time}]</span> <span class="status">[${log.status}]</span> <span class="msg">${log.msg}</span>`;
-                logContainer.appendChild(line);
-                logContainer.scrollTop = logContainer.scrollHeight;
-
-                currentLogIndex++;
-                progress = Math.round((currentLogIndex / bootLogs.length) * 100);
-                progressFill.style.width = `${progress}%`;
-
-                setTimeout(updateBootSequence, 350);
-            } else {
-                statusText.style.color = '#00ff66';
-                statusText.textContent = 'SYSTEM READY';
-                enterBtn.classList.add('ready');
-            }
-        }
-
-        setTimeout(updateBootSequence, 400);
-
-        enterBtn.addEventListener('click', () => {
-            bootOverlay.style.opacity = '0';
-            bootOverlay.style.visibility = 'hidden';
-            clearInterval(matrixInterval);
-        });
-
-
-        const canvas = document.getElementById('cyberpunk-canvas');
+        /* -------------------------------------------------------------
+         * 1. CYBERPUNK CANVAS ATMOSPHERE (GIF MAIN MENU AMBIANCE)
+         * ------------------------------------------------------------- */
+        const canvas = document.getElementById('cyber-canvas');
         const ctx = canvas.getContext('2d');
 
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
+        let width, height;
+        let particles = [];
+        let circuitLines = [];
 
-        let chips = [];
-        let circuitTraces = [];
-        let pulses = [];
-
-        class Chip {
-            constructor(x, y, w, h, label) {
-                this.x = x;
-                this.y = y;
-                this.w = w;
-                this.h = h;
-                this.label = label;
-                this.pins = [];
-                this.generatePins();
-            }
-
-            generatePins() {
-                const pinSpacing = 12;
-                // Top & Bottom pins
-                for (let px = this.x + 10; px <= this.x + this.w - 10; px += pinSpacing) {
-                    this.pins.push({ x: px, y: this.y });
-                    this.pins.push({ x: px, y: this.y + this.h });
-                }
-                // Left & Right pins
-                for (let py = this.y + 10; py <= this.y + this.h - 10; py += pinSpacing) {
-                    this.pins.push({ x: this.x, y: py });
-                    this.pins.push({ x: this.x + this.w, y: py });
-                }
-            }
-
-            draw() {
-                // Chip Body
-                ctx.fillStyle = 'rgba(12, 16, 24, 0.95)';
-                ctx.strokeStyle = '#00f3ff';
-                ctx.lineWidth = 1.5;
-                ctx.fillRect(this.x, this.y, this.w, this.h);
-                ctx.strokeRect(this.x, this.y, this.w, this.h);
-
-                // Chip Core Glow
-                ctx.fillStyle = 'rgba(0, 243, 255, 0.08)';
-                ctx.fillRect(this.x + 4, this.y + 4, this.w - 8, this.h - 8);
-
-                // Pins
-                ctx.fillStyle = '#ff0055';
-                this.pins.forEach(p => {
-                    ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
-                });
-
-                // Label
-                ctx.fillStyle = '#fcee0a';
-                ctx.font = '10px monospace';
-                ctx.textAlign = 'center';
-                ctx.fillText(this.label, this.x + this.w / 2, this.y + this.h / 2 + 3);
-            }
-        }
-
-        class CircuitTrace {
-            constructor(startX, startY, endX, endY, isFiber = false) {
-                this.points = [];
-                this.isFiber = isFiber;
-                this.color = isFiber ? '#ff0055' : '#00f3ff';
-                this.buildPath(startX, startY, endX, endY);
-            }
-
-            buildPath(sx, sy, ex, ey) {
-                this.points.push({ x: sx, y: sy });
-                
-                // Génération de coudes orthogonaux à 45/90 degrés style carte mère
-                const midX = (sx + ex) / 2;
-                if (Math.random() > 0.5) {
-                    this.points.push({ x: midX, y: sy });
-                    this.points.push({ x: midX, y: ey });
-                } else {
-                    const midY = (sy + ey) / 2;
-                    this.points.push({ x: sx, y: midY });
-                    this.points.push({ x: ex, y: midY });
-                }
-                
-                this.points.push({ x: ex, y: ey });
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.moveTo(this.points[0].x, this.points[0].y);
-                for (let i = 1; i < this.points.length; i++) {
-                    ctx.lineTo(this.points[i].x, this.points[i].y);
-                }
-                ctx.strokeStyle = this.isFiber ? 'rgba(255, 0, 85, 0.3)' : 'rgba(0, 243, 255, 0.2)';
-                ctx.lineWidth = this.isFiber ? 2.5 : 1.2;
-                ctx.stroke();
-
-                // Contact pads at endpoints
-                const last = this.points[this.points.length - 1];
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(last.x, last.y, this.isFiber ? 3 : 2, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        class DataPulse {
-            constructor(trace) {
-                this.trace = trace;
-                this.currentSegment = 0;
-                this.progress = 0;
-                this.speed = Math.random() * 0.02 + 0.015;
-                this.color = trace.isFiber ? '#ff0055' : '#00f3ff';
-                this.length = Math.random() * 20 + 10;
-            }
-
-            update() {
-                this.progress += this.speed;
-                if (this.progress >= 1) {
-                    this.progress = 0;
-                    this.currentSegment++;
-                    if (this.currentSegment >= this.trace.points.length - 1) {
-                        this.currentSegment = 0;
-                    }
-                }
-            }
-
-            draw() {
-                const p1 = this.trace.points[this.currentSegment];
-                const p2 = this.trace.points[this.currentSegment + 1];
-
-                const currX = p1.x + (p2.x - p1.x) * this.progress;
-                const currY = p1.y + (p2.y - p1.y) * this.progress;
-
-                // Glowing pulse
-                ctx.shadowColor = this.color;
-                ctx.shadowBlur = 10;
-                ctx.fillStyle = '#ffffff';
-                ctx.beginPath();
-                ctx.arc(currX, currY, this.trace.isFiber ? 3.5 : 2.5, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.shadowBlur = 0; // reset
-            }
-        }
-
-        function initMotherboard() {
-            chips = [];
-            circuitTraces = [];
-            pulses = [];
-
-            // Puces principales
-            const chipLabels = ["CPU_RYZEN", "GPU_RTX", "3RHC_NET", "PF_SENSE", "AD_DS", "GLPI_V10"];
-            const padding = 100;
-
-            for (let i = 0; i < 6; i++) {
-                const w = Math.random() * 60 + 90;
-                const h = Math.random() * 40 + 70;
-                const x = Math.random() * (width - w - padding * 2) + padding;
-                const y = Math.random() * (height - h - padding * 2) + padding;
-                chips.push(new Chip(x, y, w, h, chipLabels[i]));
-            }
-
-            // Interconnexions par circuits et câbles fibre entre puces et nœuds
-            for (let i = 0; i < chips.length; i++) {
-                const c1 = chips[i];
-                const c2 = chips[(i + 1) % chips.length];
-
-                const p1 = c1.pins[Math.floor(Math.random() * c1.pins.length)];
-                const p2 = c2.pins[Math.floor(Math.random() * c2.pins.length)];
-
-                const isFiber = i % 2 === 0;
-                const trace = new CircuitTrace(p1.x, p1.y, p2.x, p2.y, isFiber);
-                circuitTraces.push(trace);
-
-                // Multiples impulsions de données sur chaque câble
-                pulses.push(new DataPulse(trace));
-                pulses.push(new DataPulse(trace));
-            }
-
-            // Traces secondaires vers les bords de l'écran
-            chips.forEach(chip => {
-                for (let k = 0; k < 2; k++) {
-                    const pin = chip.pins[Math.floor(Math.random() * chip.pins.length)];
-                    const targetX = Math.random() > 0.5 ? 0 : width;
-                    const targetY = Math.random() * height;
-                    const trace = new CircuitTrace(pin.x, pin.y, targetX, targetY, Math.random() > 0.5);
-                    circuitTraces.push(trace);
-                    pulses.push(new DataPulse(trace));
-                }
-            });
-        }
-
-        window.addEventListener('resize', () => {
+        function resizeCanvas() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            initMotherboard();
-        });
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        initMotherboard();
+        // Particles class for Cyber Smoke & Glowing Dust
+        class DustParticle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = -Math.random() * 0.8 - 0.2; // Rising dust/smoke effect
+                this.alpha = Math.random() * 0.7 + 0.2;
+                // Cyberpunk colors: Yellow, Cyan, Subtle Magenta
+                const colors = ['#fcee0a', '#00f3ff', '#ff0055'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= 0.0015;
 
-        function animateMotherboard() {
-            ctx.fillStyle = 'rgba(5, 6, 8, 0.25)';
+                if (this.y < 0 || this.alpha <= 0) {
+                    this.reset();
+                    this.y = height + 10;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Circuit line simulation in background
+        class CircuitLine {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.length = Math.random() * 80 + 30;
+                this.horizontal = Math.random() > 0.5;
+                this.progress = 0;
+                this.speed = Math.random() * 2 + 1;
+                this.color = Math.random() > 0.5 ? '#00f3ff' : '#fcee0a';
+            }
+            update() {
+                this.progress += this.speed;
+                if (this.progress >= this.length) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.strokeStyle = this.color;
+                ctx.globalAlpha = 0.15;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                if (this.horizontal) {
+                    ctx.lineTo(this.x + this.progress, this.y);
+                } else {
+                    ctx.lineTo(this.x, this.y + this.progress);
+                }
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // Initialize particles
+        for (let i = 0; i < 70; i++) {
+            particles.push(new DustParticle());
+        }
+        for (let i = 0; i < 15; i++) {
+            circuitLines.push(new CircuitLine());
+        }
+
+        // Main Animation Loop
+        function animateCanvas() {
+            // Dark foggy background fill
+            ctx.fillStyle = 'rgba(7, 7, 13, 0.25)';
             ctx.fillRect(0, 0, width, height);
 
-            // 1. Traces de carte mère & câbles fibre
-            circuitTraces.forEach(t => t.draw());
+            // Subtle atmospheric neon yellow/cyan fog in bottom corners
+            const fogGrad1 = ctx.createRadialGradient(0, height, 5, 0, height, width * 0.6);
+            fogGrad1.addColorStop(0, 'rgba(252, 238, 10, 0.04)');
+            fogGrad1.addColorStop(1, 'transparent');
+            ctx.fillStyle = fogGrad1;
+            ctx.fillRect(0, 0, width, height);
 
-            // 2. Puces informatiques
-            chips.forEach(c => c.draw());
+            const fogGrad2 = ctx.createRadialGradient(width, 0, 5, width, 0, width * 0.5);
+            fogGrad2.addColorStop(0, 'rgba(0, 243, 255, 0.04)');
+            fogGrad2.addColorStop(1, 'transparent');
+            ctx.fillStyle = fogGrad2;
+            ctx.fillRect(0, 0, width, height);
 
-            // 3. Impulsions de données/lumière
-            pulses.forEach(p => {
+            // Draw circuit overlays
+            circuitLines.forEach(line => {
+                line.update();
+                line.draw();
+            });
+
+            // Draw glowing smoke/dust
+            particles.forEach(p => {
                 p.update();
                 p.draw();
             });
 
-            requestAnimationFrame(animateMotherboard);
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+        /* -------------------------------------------------------------
+         * 2. TERMINAL BOOT SEQUENCE LOGIC
+         * ------------------------------------------------------------- */
+        const logsContainer = document.getElementById('terminal-logs');
+        const progressBar = document.getElementById('boot-progress');
+        const bootScreen = document.getElementById('boot-screen');
+
+        const bootLogs = [
+            "[OK] Checking kernel dependencies...",
+            "[OK] Mounting network protocols (SISR / TCP_IP)...",
+            "[OK] Loading Active Directory security modules...",
+            "[OK] Establishing Cisco switch trunking links...",
+            "[OK] Proxmox hypervisor clusters operational.",
+            "[OK] Cyberpunk UI Interface loaded successfully."
+        ];
+
+        let logIndex = 0;
+
+        function runBootSequence() {
+            if (logIndex < bootLogs.length) {
+                const logEntry = document.createElement('div');
+                logEntry.textContent = bootLogs[logIndex];
+                logsContainer.appendChild(logEntry);
+                logsContainer.scrollTop = logsContainer.scrollHeight;
+                
+                logIndex++;
+                progressBar.style.width = `${(logIndex / bootLogs.length) * 100}%`;
+                
+                setTimeout(runBootSequence, 400);
+            } else {
+                setTimeout(completeBoot, 500);
+            }
+        }
+
+        function completeBoot() {
+            bootScreen.classList.add('transition-opacity', 'duration-500', 'opacity-0');
+            setTimeout(() => {
+                bootScreen.style.display = 'none';
+                checkCookieConsent(); // Prompt cookie consent after boot screen finish
+            }, 500);
         }
 
         window.onload = function() {
-            animateMotherboard();
+            runBootSequence();
         };
+
+        /* -------------------------------------------------------------
+         * 3. RGPD / CNIL COOKIE CONSENT SYSTEM
+         * ------------------------------------------------------------- */
+        const COOKIE_KEY = 'enzo_portfolio_cookie_consent_v1';
+
+        function checkCookieConsent() {
+            const consent = localStorage.getItem(COOKIE_KEY);
+            if (!consent) {
+                openCookieModal();
+            }
+        }
+
+        function openCookieModal() {
+            document.getElementById('cookie-banner').classList.remove('hidden');
+            showSummaryCookies();
+        }
+
+        function closeCookieModal() {
+            document.getElementById('cookie-banner').classList.add('hidden');
+        }
+
+        function showSummaryCookies() {
+            document.getElementById('cookie-summary-view').classList.remove('hidden');
+            document.getElementById('cookie-custom-view').classList.add('hidden');
+        }
+
+        function customizeCookies() {
+            document.getElementById('cookie-summary-view').classList.add('hidden');
+            document.getElementById('cookie-custom-view').classList.remove('hidden');
+        }
+
+        function acceptAllCookies() {
+            const consentData = {
+                essential: true,
+                analytics: true,
+                functional: true,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem(COOKIE_KEY, JSON.stringify(consentData));
+            closeCookieModal();
+            showToast("Cookies : Tous les cookies ont été acceptés.");
+        }
+
+        function rejectAllCookies() {
+            const consentData = {
+                essential: true,
+                analytics: false,
+                functional: false,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem(COOKIE_KEY, JSON.stringify(consentData));
+            closeCookieModal();
+            showToast("Cookies : Refusés (Uniquement essentiels).");
+        }
+
+        function saveCustomCookies() {
+            const analytics = document.getElementById('cookie-analytics').checked;
+            const functional = document.getElementById('cookie-functional').checked;
+
+            const consentData = {
+                essential: true,
+                analytics: analytics,
+                functional: functional,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem(COOKIE_KEY, JSON.stringify(consentData));
+            closeCookieModal();
+            showToast("Cookies : Vos préférences ont été enregistrées.");
+        }
+
+        /* -------------------------------------------------------------
+         * 4. UI HELPER FUNCTIONS
+         * ------------------------------------------------------------- */
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.textContent = msg;
+            toast.classList.remove('hidden');
+
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3500);
+        }
+
+        function handleContactForm(e) {
+            e.preventDefault();
+            showToast("Message envoyé avec succès au terminal !");
+            e.target.reset();
+        }
     </script>
 </body>
 </html>
