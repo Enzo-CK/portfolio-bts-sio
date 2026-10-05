@@ -2,37 +2,40 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Enzo Ceccarelli | Portfolio BTS SIO SISR</title>
+    <title>Enzo Ceccarelli | Cyber Operations & SISR Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portfolio de Enzo Ceccarelli, étudiant en BTS SIO option SISR à Metz.">
+    <meta name="description" content="Portfolio d'Enzo Ceccarelli - Administration Systèmes, Réseaux & Cybersécurité (BTS SIO SISR)">
 
-    <!-- Favicon (Icône de l'onglet) -->
-    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/server.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/shield.png">
 
-    <!-- Font Awesome pour les icônes -->
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Cloudflare Turnstile CAPTCHA (Anti-Spam) -->
+    <!-- Cloudflare Turnstile CAPTCHA -->
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
     <style>
     /* --------------------
-        CONFIGURATION & VARIABLES
+        CYBERPUNK / SEC THEME VARIABLES
     --------------------- */
     :root {
-        --bg: #1e1e1e;
-        --bg-alt: #252526;
-        --primary: #539dff;
-        --primary-dark: #3777c5;
-        --text: #e0e0e0;
-        --muted: #a0a0a0;
-        --border: #333333;
-        --card-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        --transition: all 0.3s ease;
-    }
-
-    html {
-        scroll-behavior: smooth;
+        --bg: #06080d;
+        --bg-alt: #0b0f19;
+        --card-bg: rgba(15, 23, 42, 0.75);
+        --primary: #00f0ff;
+        --primary-glow: rgba(0, 240, 255, 0.4);
+        --secondary: #7000ff;
+        --success: #00ff66;
+        --text: #e2e8f0;
+        --muted: #64748b;
+        --border: rgba(0, 240, 255, 0.2);
+        --border-hover: rgba(0, 240, 255, 0.8);
+        --font-mono: 'Fira Code', monospace;
+        --font-sans: 'Inter', system-ui, sans-serif;
     }
 
     * {
@@ -41,32 +44,42 @@
         padding: 0;
     }
 
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        background: var(--bg);
+        font-family: var(--font-sans);
+        background-color: var(--bg);
         color: var(--text);
         line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    /* Background Canvas Animation */
+    #cyber-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        pointer-events: none;
     }
 
     .container {
         width: 100%;
-        max-width: 1100px;
+        max-width: 1200px;
         margin: 0 auto;
         padding: 0 1.5rem;
     }
 
-    a {
-        text-decoration: none;
-        color: inherit;
-        transition: var(--transition);
-    }
-
     /* --------------------
-        NAVIGATION
+        HEADER & NAVBAR
     --------------------- */
     header {
-        background: rgba(31, 31, 31, 0.95);
-        backdrop-filter: blur(8px);
+        background: rgba(6, 8, 13, 0.85);
+        backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--border);
         position: sticky;
         top: 0;
@@ -81,9 +94,19 @@
     }
 
     .logo {
-        font-weight: 800;
+        font-family: var(--font-mono);
+        font-weight: 700;
         color: var(--primary);
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .logo::before {
+        content: '>';
+        color: var(--success);
     }
 
     .nav-links {
@@ -94,114 +117,246 @@
     }
 
     .nav-links a {
-        font-size: 0.9rem;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
         color: var(--muted);
-        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
     }
 
-    .nav-links a:hover { color: var(--primary); }
+    .nav-links a:hover {
+        color: var(--primary);
+        text-shadow: 0 0 8px var(--primary-glow);
+    }
 
     .nav-social {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         color: var(--primary) !important;
     }
 
     .menu-btn {
         display: none;
         background: none;
-        border: none;
-        color: var(--text);
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-
-    /* --------------------
-        HERO SECTION
-    --------------------- */
-    section { padding: 5rem 0; }
-    section:nth-of-type(even) { background: var(--bg-alt); }
-
-    .hero { padding: 8rem 0; }
-
-    .hero-title {
-        font-size: clamp(2.5rem, 6vw, 4rem);
-        font-weight: 900;
-        margin-bottom: 0.5rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1.5rem;
+        border: 1px solid var(--border);
         color: var(--primary);
-        margin-bottom: 1.5rem;
-        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
     }
 
     /* --------------------
         SECTIONS & CARDS
     --------------------- */
-    .section-title {
-        font-size: 2rem;
-        margin-bottom: 3rem;
+    section {
+        padding: 6rem 0;
         position: relative;
     }
 
-    .section-title::after {
-        content: "";
-        display: block;
-        width: 50px;
-        height: 4px;
-        background: var(--primary);
-        margin-top: 10px;
+    .section-title {
+        font-family: var(--font-mono);
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 3rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .section-title::before {
+        content: '//';
+        color: var(--primary);
     }
 
     .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 2rem;
     }
 
     .card {
-        background: var(--bg);
-        padding: 2rem;
-        border-radius: 15px;
+        background: var(--card-bg);
         border: 1px solid var(--border);
-        transition: var(--transition);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        border-radius: 12px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
     }
 
-    section:nth-of-type(even) .card {
-        background: var(--bg);
-    }
-
-    section:nth-of-type(odd) .card {
-        background: var(--bg-alt);
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.5s ease;
     }
 
     .card:hover {
-        border-color: var(--primary);
-        box-shadow: var(--card-shadow);
+        border-color: var(--border-hover);
         transform: translateY(-5px);
+        box-shadow: 0 10px 30px -10px rgba(0, 240, 255, 0.15);
+    }
+
+    .card:hover::before {
+        transform: translateX(100%);
     }
 
     .tag {
-        background: #364052;
-        color: #9cbfe8;
-        padding: 0.2rem 0.7rem;
-        border-radius: 10px;
-        font-size: 0.8rem;
-        margin-right: 5px;
+        font-family: var(--font-mono);
+        background: rgba(0, 240, 255, 0.1);
+        color: var(--primary);
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        margin-right: 6px;
+        margin-bottom: 8px;
         display: inline-block;
-        margin-bottom: 5px;
     }
 
     /* --------------------
-        EXPERIENCE PRO (3RHC)
+        HERO SECTION
+    --------------------- */
+    .hero {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-badge {
+        font-family: var(--font-mono);
+        color: var(--success);
+        background: rgba(0, 255, 102, 0.1);
+        border: 1px solid rgba(0, 255, 102, 0.3);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-badge::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--success);
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 900;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        color: #fff;
+    }
+
+    .hero-subtitle {
+        font-family: var(--font-mono);
+        color: var(--primary);
+        font-size: 1.4rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* --------------------
+        COMPÉTENCES GRID
+    --------------------- */
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .skill-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    .skill-card h4 {
+        font-family: var(--font-mono);
+        color: var(--primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .skill-card ul {
+        list-style: none;
+        font-size: 0.9rem;
+        color: var(--muted);
+    }
+
+    .skill-card ul li {
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .skill-card ul li::before {
+        content: '>';
+        color: var(--success);
+        font-family: var(--font-mono);
+    }
+
+    /* --------------------
+        BOUTONS
+    --------------------- */
+    .btn {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        padding: 0.8rem 1.5rem;
+        border-radius: 4px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: #000;
+        border: 1px solid var(--primary);
+        box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+        background: transparent;
+        color: var(--primary);
+        box-shadow: 0 0 25px var(--primary-glow);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--primary);
+        border: 1px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+        background: rgba(0, 240, 255, 0.1);
+        box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    /* --------------------
+        EXPERIENCE & FORM
     --------------------- */
     .experience-card {
         border-left: 4px solid var(--primary);
-        padding-left: 1.5rem;
     }
 
     .experience-list {
@@ -210,101 +365,33 @@
     }
 
     .experience-list li {
-        margin-bottom: 0.5rem;
-        color: var(--muted);
+        margin-bottom: 0.6rem;
+        color: var(--text);
         display: flex;
-        align-items: flex-start;
         gap: 10px;
+        font-size: 0.95rem;
     }
 
     .experience-list li i {
         color: var(--primary);
-        margin-top: 5px;
+        margin-top: 4px;
     }
 
-    /* --------------------
-        COMPÉTENCES
-    --------------------- */
-    .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .skill-card {
-        padding: 1.5rem;
-        border-radius: 12px;
+    input, textarea {
+        width: 100%;
+        padding: 14px;
+        border-radius: 6px;
         border: 1px solid var(--border);
-        background: var(--bg);
-        transition: var(--transition);
-    }
-
-    .skill-card:hover {
-        border-color: var(--primary);
-        transform: translateY(-3px);
-    }
-
-    .skill-card i {
-        font-size: 2rem;
-        color: var(--primary);
-        margin-bottom: 1rem;
-    }
-
-    .skill-card h4 {
-        margin-bottom: 0.8rem;
+        background: rgba(6, 8, 13, 0.8);
         color: #fff;
-    }
-
-    .skill-card ul {
-        list-style: none;
-        color: var(--muted);
+        font-family: var(--font-mono);
         font-size: 0.9rem;
     }
 
-    .skill-card ul li {
-        margin-bottom: 0.4rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .skill-card ul li::before {
-        content: "▹";
-        color: var(--primary);
-    }
-
-    /* --------------------
-        BOUTONS
-    --------------------- */
-    .btn {
-        padding: 0.8rem 1.8rem;
-        border-radius: 50px;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-    .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
-    .btn-outline:hover { background: var(--primary); color: #fff; transform: translateY(-2px); }
-
-    /* --------------------
-        ANIMATIONS (REVEAL)
-    --------------------- */
-    .reveal {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.8s ease;
-    }
-
-    .reveal.active {
-        opacity: 1;
-        transform: translateY(0);
+    input:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 10px var(--primary-glow);
     }
 
     footer {
@@ -312,9 +399,10 @@
         text-align: center;
         border-top: 1px solid var(--border);
         color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
     }
 
-    /* Responsive Navbar */
     @media (max-width: 768px) {
         .menu-btn { display: block; }
         .nav-links {
@@ -324,10 +412,9 @@
             top: 100%;
             left: 0;
             width: 100%;
-            background: var(--bg-alt);
+            background: var(--bg);
             padding: 1.5rem;
             border-bottom: 1px solid var(--border);
-            gap: 1rem;
         }
         .nav-links.active { display: flex; }
     }
@@ -335,22 +422,25 @@
 </head>
 <body>
 
+    <!-- DIGITAL GLOBE ANIMATION CANVAS -->
+    <canvas id="cyber-canvas"></canvas>
+
     <header>
         <div class="container navbar">
-            <div class="logo">ENZO CECCARELLI</div>
-            <button class="menu-btn" id="menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+            <div class="logo">ENZO.CECCARELLI_</div>
+            <button class="menu-btn" id="menu-toggle" aria-label="Menu"><i class="fas fa-code"></i></button>
             <nav>
                 <ul class="nav-links" id="nav-links">
-                    <li><a href="#accueil">Accueil</a></li>
-                    <li><a href="#apropos">À propos</a></li>
-                    <li><a href="#experience">Expérience</a></li>
-                    <li><a href="#competences">Compétences</a></li>
-                    <li><a href="#projets">Projets</a></li>
-                    <li><a href="#epreuve-e4">Épreuve E4</a></li>
-                    <li><a href="#veille">Veille Tech</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                    <!-- Remplacer le '#' par ton vrai lien LinkedIn -->
-                    <li><a href="https://linkedin.com" target="_blank" class="nav-social" title="Mon LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+                    <li><a href="#accueil">/Accueil</a></li>
+                    <li><a href="#apropos">/À-Propos</a></li>
+                    <li><a href="#experience">/3RHC</a></li>
+                    <li><a href="#competences">/Compétences</a></li>
+                    <li><a href="#projets">/Projets</a></li>
+                    <li><a href="#epreuve-e4">/E5-E4</a></li>
+                    <li><a href="#veille">/Veille</a></li>
+                    <li><a href="#contact">/Contact</a></li>
+                    <!-- Remplace par l'URL exacte de ton profil LinkedIn -->
+                    <li><a href="https://www.linkedin.com/in/ton-profil-linkedin/" target="_blank" rel="noopener noreferrer" class="nav-social" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a></li>
                 </ul>
             </nav>
         </div>
@@ -359,66 +449,63 @@
     <main>
         <!-- HERO -->
         <section id="accueil" class="hero">
-            <div class="container reveal">
+            <div class="container">
+                <div class="hero-badge">OPERATIONAL SYSTEM READY // SISR 2026</div>
                 <h1 class="hero-title">Enzo Ceccarelli</h1>
-                <p class="hero-subtitle">Étudiant BTS SIO Option SISR</p>
-                <p style="max-width: 650px; font-size: 1.1rem;">
-                    Alternant au sein du 3ᵉ Régiment d'Hélicoptères de Combat (3RHC) à Étain, je me spécialise dans l'administration des infrastructures réseaux, le support utilisateur et la sécurité informatique.
+                <p class="hero-subtitle">[BTS SIO Option SISR & Future Cybersécurité]</p>
+                <p style="max-width: 650px; color: var(--muted); font-size: 1.1rem; margin-bottom: 2rem;">
+                    Technicien Systèmes, Réseaux et Sécurité en alternance au 3ᵉ Régiment d'Hélicoptères de Combat (3RHC). Spécialisé dans le déploiement d'infrastructures, la gestion de parc et le hardening.
                 </p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="#projets" class="btn btn-primary"><i class="fas fa-terminal"></i> Explorer les travaux</a>
+                    <a href="#contact" class="btn btn-outline"><i class="fas fa-envelope"></i> Me contacter</a>
+                </div>
             </div>
         </section>
 
         <!-- A PROPOS -->
         <section id="apropos">
             <div class="container">
-                <h2 class="section-title">À propos de moi</h2>
+                <h2 class="section-title">À propos</h2>
                 <div class="grid">
-                    <div class="card reveal">
-                        <div>
-                            <h3>Mon Parcours</h3>
-                            <p style="margin-top: 10px;">Après un parcours en Gestion-Finance, j'ai décidé de me réorienter vers ma passion initiale : l'informatique. Mon projet est d'évoluer vers une Licence en Cybersécurité.</p>
-                        </div>
-                        <div style="margin-top: 15px;">
-                            <a href="mon_cv_enzo.html" target="_blank" class="btn btn-outline">
-                                <i class="fas fa-file-pdf"></i> Télécharger mon CV
-                            </a>
+                    <div class="card">
+                        <h3>Parcours & Vision</h3>
+                        <p style="margin-top: 10px; color: var(--muted);">Issu de la Gestion-Finance, j'ai pivoté vers l'infrastructure et la sécurité réseau. Mon objectif est d'intégrer une Licence spécialisée en Cybersécurité pour approfondir l'analyse de vulnérabilités et la protection des architectures d'entreprise.</p>
+                        <div style="margin-top: 20px;">
+                            <a href="mon_cv_enzo.html" target="_blank" class="btn btn-outline"><i class="fas fa-file-code"></i> Fichier CV (PDF)</a>
                         </div>
                     </div>
-                    <div class="card reveal">
-                        <div>
-                            <h3>Informations</h3>
-                            <p style="margin-top: 10px;"><strong>Âge :</strong> 24 ans</p>
-                            <p><strong>Lieu :</strong> Hussigny-Godbrange</p>
-                            <p><strong>École :</strong> Campus MEWO Metz</p>
-                            <p><strong>Entreprise :</strong> 3RHC Étain (Alternance)</p>
-                        </div>
+                    <div class="card">
+                        <h3>Métadonnées Profil</h3>
+                        <p style="margin-top: 10px;"><strong>Statut :</strong> Alternant BTS SIO SISR</p>
+                        <p><strong>Régiment :</strong> 3ᵉ RHC (Étain)</p>
+                        <p><strong>École :</strong> Campus MEWO Metz</p>
+                        <p><strong>Localisation :</strong> Hussigny-Godbrange / Metz</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- EXPERIENCE PROFESSIONNELLE (3RHC) -->
+        <!-- EXPERIENCE PRO (3RHC) -->
         <section id="experience">
             <div class="container">
-                <h2 class="section-title">Expérience en Alternance</h2>
-                <div class="card reveal experience-card">
+                <h2 class="section-title">Expérience Professionnelle</h2>
+                <div class="card experience-card">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
                         <div>
-                            <h3>Technicien Informatique & Réseaux (Alternant)</h3>
-                            <p style="color: var(--primary); font-weight: 600;">3ᵉ Régiment d'Hélicoptères de Combat (3RHC) — Étain</p>
+                            <h3>Technicien Helpdesk & Administration Systemes</h3>
+                            <p style="color: var(--primary); font-family: var(--font-mono);">3ᵉ Régiment d'Hélicoptères de Combat (3RHC)</p>
                         </div>
-                        <span class="tag" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">SISR / Support & Parc</span>
+                        <span class="tag">Environnement Critique / Défense</span>
                     </div>
 
-                    <p style="margin-top: 15px; font-size: 0.95rem;">
-                        Au sein de la cellule informatique du régiment, j'assure le maintien en condition opérationnelle du parc informatique et l'assistance technique auprès des utilisateurs.
-                    </p>
+                    <p style="margin-top: 15px; color: var(--muted);">Gestion et maintien en condition opérationnelle (MCO) de l'infrastructure informatique et assistance utilisateur au sein du régiment.</p>
 
                     <ul class="experience-list">
-                        <li><i class="fas fa-check-circle"></i> <span><strong>Support Helpdesk N1/N2 :</strong> Assistance aux utilisateurs et résolution d'incidents matériels et logiciels.</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span><strong>Gestion du Parc Informatique :</strong> Suivi de l'inventaire, masterisation, installation et déploiement des postes de travail.</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span><strong>Contrôle des Accès :</strong> Réinitialisation de mots de passe et gestion des droits d'accès aux groupes fonctionnels.</span></li>
-                        <li><i class="fas fa-check-circle"></i> <span><strong>Configurations Spécifiques :</strong> Préparation sur-mesure de postes clients selon les besoins métiers et configuration de flottes de tablettes.</span></li>
+                        <li><i class="fas fa-angle-right"></i> <span><strong>Support Helpdesk N1/N2 :</strong> Résolution des incidents matériels, système et logiciels.</span></li>
+                        <li><i class="fas fa-angle-right"></i> <span><strong>Gestion du Parc Informatique :</strong> Inventaire, masterisation, déploiement et maintenance de postes.</span></li>
+                        <li><i class="fas fa-angle-right"></i> <span><strong>Gestion des Accès :</strong> Administration des comptes, réinitialisation des accès et attribution des droits sur groupes fonctionnels.</span></li>
+                        <li><i class="fas fa-angle-right"></i> <span><strong>Déploiements Spécifiques :</strong> Préparation sur-mesure de machines métiers et gestion d'une flotte de tablettes tactiques.</span></li>
                     </ul>
                 </div>
             </div>
@@ -427,170 +514,105 @@
         <!-- COMPETENCES SISR -->
         <section id="competences">
             <div class="container">
-                <h2 class="section-title">Compétences Techniques</h2>
+                <h2 class="section-title">Matrice de Compétences</h2>
                 <div class="skills-grid">
-                    <div class="skill-card reveal">
-                        <i class="fas fa-network-wired"></i>
-                        <h4>Réseaux & Commutateurs</h4>
+                    <div class="skill-card">
+                        <h4><i class="fas fa-network-wired"></i> Réseaux & Switchs</h4>
                         <ul>
                             <li>Cisco Packet Tracer</li>
-                            <li>VLANs, Trunking, Inter-VLAN</li>
-                            <li>ACL & Sécurité d'accès</li>
+                            <li>VLANs, Trunk, Inter-VLAN</li>
+                            <li>Filtrage & ACLs</li>
                             <li>Routage statique & dynamique</li>
                         </ul>
                     </div>
-                    <div class="skill-card reveal">
-                        <i class="fas fa-server"></i>
-                        <h4>Administration Systèmes</h4>
+                    <div class="skill-card">
+                        <h4><i class="fas fa-server"></i> Systèmes & Annuaire</h4>
                         <ul>
-                            <li>Windows Server (AD DS, DNS, DHCP, GPO)</li>
-                            <li>Linux (Ubuntu Server, Debian)</li>
-                            <li>Gestion des utilisateurs & droits</li>
+                            <li>Windows Server (AD DS, DNS, DHCP)</li>
+                            <li>Linux (Ubuntu, Debian)</li>
+                            <li>Gestion des privilèges</li>
                             <li>Hardening d'OS</li>
                         </ul>
                     </div>
-                    <div class="skill-card reveal">
-                        <i class="fas fa-cubes"></i>
-                        <h4>Virtualisation & Cloud</h4>
+                    <div class="skill-card">
+                        <h4><i class="fas fa-layer-group"></i> Virtualisation</h4>
                         <ul>
                             <li>VMware ESXi / Workstation</li>
                             <li>VirtualBox</li>
-                            <li>Gestion des Snapshots & VSwitches</li>
+                            <li>Virtual Switches & Snapshots</li>
                         </ul>
                     </div>
-                    <div class="skill-card reveal">
-                        <i class="fas fa-shield-halved"></i>
-                        <h4>Sécurité & Scripting</h4>
+                    <div class="skill-card">
+                        <h4><i class="fas fa-shield-cat"></i> Sécurité & Scripts</h4>
                         <ul>
-                            <li>Analyse de trames (Wireshark)</li>
-                            <li>Scans de vulnérabilités (Nmap)</li>
-                            <li>Scripting PowerShell & Bash</li>
-                            <li>Sensibilisation aux bonnes pratiques</li>
+                            <li>Wireshark (Analyse trames)</li>
+                            <li>Nmap (Audit / Scans)</li>
+                            <li>PowerShell & Bash</li>
+                            <li>Firewalling (pfSense, OPNsense)</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- PROJETS & TRAVAUX PRATIQUES -->
+        <!-- PROJETS PRATIQUES -->
         <section id="projets">
             <div class="container">
-                <h2 class="section-title">Projets & Travaux Pratiques</h2>
+                <h2 class="section-title">Réalisations & TPs</h2>
                 <div class="grid">
 
-                    <!-- TP 1 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">VMware</span>
-                                <span class="tag">pfSense</span>
-                                <span class="tag">WordPress</span>
-                                <span class="tag">NextCloud</span>
-                            </div>
-                            <h3>TP Parc informatique (BYFECT v4)</h3>
-                            <p style="margin-top: 10px;">Déploiement complet d'une infrastructure réseau sous VMware pour l'entreprise fictive BYFECT v4.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
-                                <li>Mise en place d'un pare-feu pfSense avec règles LAN/WAN.</li>
-                                <li>Hébergement d'un serveur Web Apache2 avec Nextcloud & WordPress.</li>
-                                <li>Interconnexion et routage des postes clients Ubuntu.</li>
-                            </ul>
-                        </div>
+                    <article class="card">
+                        <span class="tag">VMware</span><span class="tag">pfSense</span><span class="tag">WordPress</span>
+                        <h3>TP Infrastructure BYFECT v4</h3>
+                        <p style="margin-top: 10px; color: var(--muted); font-size: 0.9rem;">
+                            Conception d'une architecture sécurisée complète sous VMware : routeur pfSense, serveur LAMP hébergeant Nextcloud et WordPress, segmentation réseau.
+                        </p>
                         <div style="margin-top: 20px;">
-                            <a href="TP BYFECT v4 Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
-                            </a>
+                            <a href="TP BYFECT v4 Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline"><i class="fas fa-file-pdf"></i> Documentation PDF</a>
                         </div>
                     </article>
 
-                    <!-- TP 2 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">pfSense</span>
-                                <span class="tag">Firewall</span>
-                                <span class="tag">VMware</span>
-                            </div>
-                            <h3>TP Pare-feu pfSense</h3>
-                            <p style="margin-top: 10px;">Installation, initialisation et sécurisation de l'hyperviseur pare-feu open source pfSense.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
-                                <li>Attribution et adressage des cartes réseau WAN et LAN.</li>
-                                <li>Configuration de l'interface Web d'administration GUI.</li>
-                                <li>Mise en place de règles de routage et de filtrage d'accès.</li>
-                            </ul>
-                        </div>
+                    <article class="card">
+                        <span class="tag">pfSense</span><span class="tag">Firewall</span>
+                        <h3>TP Pare-feu pfSense</h3>
+                        <p style="margin-top: 10px; color: var(--muted); font-size: 0.9rem;">
+                            Mise en place d'un pare-feu pfSense, configuration des interfaces LAN/WAN, NAT et déploiement de règles de filtrage de flux d'entreprise.
+                        </p>
                         <div style="margin-top: 20px;">
-                            <a href="TP PFSENSE Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
-                            </a>
+                            <a href="TP PFSENSE Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline"><i class="fas fa-file-pdf"></i> Documentation PDF</a>
                         </div>
                     </article>
 
-                    <!-- TP 3 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">LAMP</span>
-                                <span class="tag">MySQL/MariaDB</span>
-                                <span class="tag">Apache</span>
-                            </div>
-                            <h3>TP phpMyAdmin & WordPress</h3>
-                            <p style="margin-top: 10px;">Installation et administration d'une pile Web LAMP complète sur un serveur Linux Ubuntu.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
-                                <li>Configuration des VirtualHosts sous Apache2.</li>
-                                <li>Création et gestion des bases de données via phpMyAdmin.</li>
-                                <li>Déploiement et sécurisation de l'application WordPress.</li>
-                            </ul>
-                        </div>
+                    <article class="card">
+                        <span class="tag">Linux</span><span class="tag">Apache</span><span class="tag">MariaDB</span>
+                        <h3>TP Stack LAMP & WordPress</h3>
+                        <p style="margin-top: 10px; color: var(--muted); font-size: 0.9rem;">
+                            Installation et sécurisation d'un serveur Web Linux, configuration des hôtes virtuels Apache, bases de données MySQL et déploiement applicatif.
+                        </p>
                         <div style="margin-top: 20px;">
-                            <a href="TP PHPMYADMIN WordPress.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
-                            </a>
+                            <a href="TP PHPMYADMIN WordPress.pdf" target="_blank" class="btn btn-outline"><i class="fas fa-file-pdf"></i> Documentation PDF</a>
                         </div>
                     </article>
 
-                    <!-- TP 4 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">GLPI</span>
-                                <span class="tag">Gestion de Parc</span>
-                                <span class="tag">ITSM</span>
-                            </div>
-                            <h3>TP Serveur GLPI v10</h3>
-                            <p style="margin-top: 10px;">Déploiement d'une solution de gestion d'inventaire informatique et de gestion d'incidents (Helpdesk).</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
-                                <li>Installation des dépendances PHP et bases de données MariaDB.</li>
-                                <li>Gestion des profils, droits utilisateurs et groupes d'assistance.</li>
-                                <li>Déploiement et remontée automatique des agents d'inventaire.</li>
-                            </ul>
-                        </div>
+                    <article class="card">
+                        <span class="tag">GLPI v10</span><span class="tag">ITSM</span>
+                        <h3>TP Administration GLPI</h3>
+                        <p style="margin-top: 10px; color: var(--muted); font-size: 0.9rem;">
+                            Déploiement d'un serveur GLPI v10 pour l'inventaire automatique des machines du parc et le traitement centralisé des tickets Helpdesk.
+                        </p>
                         <div style="margin-top: 20px;">
-                            <a href="TP serveur GLPI Installation.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
-                            </a>
+                            <a href="TP serveur GLPI Installation.pdf" target="_blank" class="btn btn-outline"><i class="fas fa-file-pdf"></i> Documentation PDF</a>
                         </div>
                     </article>
 
-                    <!-- TP 5 -->
-                    <article class="card reveal">
-                        <div>
-                            <div style="margin-bottom: 10px;">
-                                <span class="tag">OPNsense</span>
-                                <span class="tag">Sécurité</span>
-                                <span class="tag">Réseau</span>
-                            </div>
-                            <h3>TP Installation OPNsense</h3>
-                            <p style="margin-top: 10px;">Déploiement et mise en service du pare-feu et routeur open-source OPNsense.</p>
-                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
-                                <li>Affectation des rôles d'interfaces physiques et virtuelles (LAN/WAN).</li>
-                                <li>Gestion des règles de sécurité du pare-feu et translation d'adresses (NAT).</li>
-                                <li>Comparatif des fonctionnalités de sécurité par rapport à pfSense.</li>
-                            </ul>
-                        </div>
+                    <article class="card">
+                        <span class="tag">OPNsense</span><span class="tag">Sécurité</span>
+                        <h3>TP Firewall OPNsense</h3>
+                        <p style="margin-top: 10px; color: var(--muted); font-size: 0.9rem;">
+                            Analyse comparative et déploiement de la solution OPNsense : création de zones de confiance et règles de filtrage.
+                        </p>
                         <div style="margin-top: 20px;">
-                            <a href="TP_OPNsense.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
-                            </a>
+                            <a href="TP_OPNsense.pdf" target="_blank" class="btn btn-outline"><i class="fas fa-file-pdf"></i> Documentation PDF</a>
                         </div>
                     </article>
 
@@ -598,17 +620,17 @@
             </div>
         </section>
 
-        <!-- EPREUVE E4 & TABLEAU DE SYNTHESE -->
+        <!-- EPREUVE E4 -->
         <section id="epreuve-e4">
             <div class="container">
-                <h2 class="section-title">Portefeuille de Compétences (Épreuve E4)</h2>
-                <div class="card reveal">
-                    <h3>Tableau de Synthèse Épreuve E5 / E4</h3>
-                    <p style="margin: 1rem 0;">
-                        Retrouvez ci-dessous mon tableau de synthèse officiel (Session 2026). Ce document récapitule l'ensemble de mes réalisations professionnelles en entreprise (3RHC) et en centre de formation (Campus MEWO), ainsi que le croisement avec le référentiel du BTS SIO SISR (gestion du patrimoine, réponse aux incidents, travail en mode projet, etc.).
+                <h2 class="section-title">Portefeuille BTS SIO (Épreuves E4 / E5)</h2>
+                <div class="card">
+                    <h3>Tableau de Synthèse Référentiel SISR</h3>
+                    <p style="margin: 1rem 0; color: var(--muted);">
+                        Accédez au tableau officiel d'évaluation (Annexe 6.5) récapitulant les compétences validées durant mon parcours au Campus MEWO et en entreprise au 3RHC.
                     </p>
                     <a href="BTS_SIO_Annexe_VI.5_Epreuve E5 - Tableau de synthe_se_2026.xlsx - Tableau de synthèse Épreuve E5.pdf" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-file-pdf"></i> Télécharger le Tableau de Synthèse 2026 (PDF)
+                        <i class="fas fa-download"></i> Obtenir le Tableau de Synthèse (.PDF)
                     </a>
                 </div>
             </div>
@@ -619,45 +641,44 @@
             <div class="container">
                 <h2 class="section-title">Veille Technologique</h2>
                 <div class="grid">
-                    <div class="card reveal">
-                        <h3><i class="fas fa-rss" style="color:var(--primary); margin-right:8px;"></i> Méthodologie & Outils</h3>
-                        <p style="margin-top:10px;">Afin de maintenir mes compétences à jour et d'anticiper les vulnérabilités réseaux, j'utilise un processus de veille régulier :</p>
-                        <ul style="margin-top: 10px; font-size: 0.9rem; color: var(--muted); padding-left: 20px;">
-                            <li><strong>Agrégation de flux :</strong> Feedly (Abonnements aux flux RSS spécialisés).</li>
-                            <li><strong>Sources institutionnelles :</strong> CERT-FR, ANSSI (Bulletins d'alerte et de sécurité).</li>
-                            <li><strong>Médias spécialisés :</strong> IT-Connect, ZDNet.</li>
+                    <div class="card">
+                        <h3><i class="fas fa-rss" style="color:var(--primary);"></i> Flux & Méthodologie</h3>
+                        <p style="margin-top:10px; color: var(--muted); font-size: 0.9rem;">Automatisation de la collecte d'informations sur les vulnérabilités et correctifs de sécurité :</p>
+                        <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); padding-left: 20px;">
+                            <li>Feedly (Flux RSS spécialisés cybersécurité)</li>
+                            <li>Alertes CERT-FR & Publications ANSSI</li>
+                            <li>Médiathèque technique IT-Connect & ZDNet</li>
                         </ul>
                     </div>
-                    <div class="card reveal">
-                        <h3><i class="fas fa-shield-halved" style="color:var(--primary); margin-right:8px;"></i> Sujet : Sécurisation des Accès & Hardening</h3>
+                    <div class="card">
+                        <h3><i class="fas fa-user-shield" style="color:var(--primary);"></i> Sujet : Hardening & Accès</h3>
                         <div style="margin-top: 10px;">
-                            <span class="tag">Gestion des Privilèges</span>
-                            <span class="tag">MFA / Directives ANSSI</span>
-                            <span class="tag">Hardening OS</span>
-                            <span class="tag">Gestion des Patchs</span>
+                            <span class="tag">Moindre Privilège</span>
+                            <span class="tag">Authentification MFA</span>
+                            <span class="tag">Patch Management</span>
                         </div>
-                        <p style="margin-top:15px; font-size: 0.9rem;">
-                            Ma veille porte sur les bonnes pratiques de **sécurisation des systèmes (Windows/Linux)** et la **protection des accès réseaux**. Je me concentre sur l'application du principe du moindre privilège, le déploiement de l'authentification multifacteur (MFA) et le suivi des vulnérabilités critiques (Patch Management).
+                        <p style="margin-top:15px; color: var(--muted); font-size: 0.9rem;">
+                            Étude des méthodes de **durcissement des systèmes d'exploitation (Windows/Linux)** et de la **sécurisation des contrôles d'accès** en entreprise pour prévenir la propagation d'attaques.
                         </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CONTACT AVEC CAPTCHA -->
+        <!-- CONTACT -->
         <section id="contact">
             <div class="container">
-                <h2 class="section-title">Contact</h2>
-                <div class="reveal" style="max-width: 600px; margin: 0 auto;">
+                <h2 class="section-title">Canal de Contact</h2>
+                <div style="max-width: 600px; margin: 0 auto;">
                     <form action="https://formspree.io/f/manrdvlg" method="POST" style="display: flex; flex-direction: column; gap: 1.2rem;">
-                        <input type="text" name="name" placeholder="Votre Nom / Prénom" required style="padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: #fff;">
-                        <input type="email" name="email" placeholder="Votre Email" required style="padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: #fff;">
-                        <textarea name="message" placeholder="Votre message..." rows="5" required style="padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: #fff;"></textarea>
+                        <input type="text" name="name" placeholder="IDENTIFIANT / NOM" required>
+                        <input type="email" name="email" placeholder="ADRESSE EMAIL" required>
+                        <textarea name="message" placeholder="MESSAGE..." rows="5" required></textarea>
 
-                        <!-- Cloudflare Turnstile Widget (Remplace la data-sitekey si tu as ta propre clé) -->
+                        <!-- Turnstile CAPTCHA -->
                         <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark"></div>
 
-                        <button type="submit" class="btn btn-primary" style="justify-content: center;">Envoyer le message</button>
+                        <button type="submit" class="btn btn-primary" style="justify-content: center;"><i class="fas fa-paper-plane"></i> Transmettre</button>
                     </form>
                 </div>
             </div>
@@ -665,42 +686,112 @@
     </main>
 
     <footer>
-        <p>&copy; <span id="year"></span> Enzo Ceccarelli — Portfolio BTS SIO SISR</p>
-        <p style="margin-top: 8px; font-size: 1.2rem;">
-            <a href="https://linkedin.com" target="_blank" style="color: var(--primary);" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <p>&copy; <span id="year"></span> Enzo Ceccarelli // All Security Operations Maintained</p>
+        <p style="margin-top: 8px;">
+            <!-- Remplace aussi par ton lien LinkedIn ici -->
+            <a href="https://www.linkedin.com/in/ton-profil-linkedin/" target="_blank" rel="noopener noreferrer" style="color: var(--primary);" title="Profil LinkedIn"><i class="fab fa-linkedin font-size: 1.2rem;"></i></a>
         </p>
     </footer>
 
+    <!-- DIGITAL GLOBE & INTERACTIVE CANVAS SCRIPT -->
     <script>
-        // Année dynamique
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Menu Toggle Mobile
+        // Responsive Navigation Menu
         const menuToggle = document.getElementById('menu-toggle');
         const navLinks = document.getElementById('nav-links');
+        menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
 
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
+        // CANVASES ANIMATION: ROTATING DIGITAL GLOBE & NETWORK NODES
+        const canvas = document.getElementById('cyber-canvas');
+        const ctx = canvas.getContext('2d');
 
-        // Fermer le menu mobile lors d'un clic sur un lien
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
+        let width, height;
+        let points = [];
+        const numPoints = 60;
+        const globeRadius = 250;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Generate 3D sphere points
+        for (let i = 0; i < numPoints; i++) {
+            const theta = Math.acos(2 * Math.random() - 1);
+            const phi = 2 * Math.PI * Math.random();
+            points.push({
+                x: globeRadius * Math.sin(theta) * Math.cos(phi),
+                y: globeRadius * Math.sin(theta) * Math.sin(phi),
+                z: globeRadius * Math.cos(theta)
             });
-        });
+        }
 
-        // Animation de révélation au scroll
-        const observerOptions = { threshold: 0.15 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+        let angleY = 0.002;
+        let angleX = 0.001;
+
+        function drawGlobe() {
+            ctx.clearRect(0, 0, width, height);
+
+            const centerX = width > 900 ? width * 0.8 : width * 0.5;
+            const centerY = height * 0.5;
+
+            // Rotate points
+            points.forEach(p => {
+                // Rotation Y
+                let x1 = p.x * Math.cos(angleY) - p.z * Math.sin(angleY);
+                let z1 = p.z * Math.cos(angleY) + p.x * Math.sin(angleY);
+
+                // Rotation X
+                let y2 = p.y * Math.cos(angleX) - z1 * Math.sin(angleX);
+                let z2 = z1 * Math.cos(angleX) + p.y * Math.sin(angleX);
+
+                p.x = x1;
+                p.y = y2;
+                p.z = z2;
+
+                // Projection
+                const scale = 400 / (400 + p.z);
+                const projX = p.x * scale + centerX;
+                const projY = p.y * scale + centerY;
+
+                // Draw Nodes
+                const alpha = Math.max(0.1, (p.z + globeRadius) / (2 * globeRadius));
+                ctx.beginPath();
+                ctx.arc(projX, projY, 2 * scale, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0, 240, 255, ${alpha})`;
+                ctx.fill();
+            });
+
+            // Draw Lines between nearby points
+            for (let i = 0; i < points.length; i++) {
+                for (let j = i + 1; j < points.length; j++) {
+                    const dx = points[i].x - points[j].x;
+                    const dy = points[i].y - points[j].y;
+                    const dz = points[i].z - points[j].z;
+                    const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (dist < 100) {
+                        const scaleI = 400 / (400 + points[i].z);
+                        const scaleJ = 400 / (400 + points[j].z);
+                        const alpha = (1 - dist / 100) * 0.25;
+
+                        ctx.beginPath();
+                        ctx.moveTo(points[i].x * scaleI + centerX, points[i].y * scaleI + centerY);
+                        ctx.lineTo(points[j].x * scaleJ + centerX, points[j].y * scaleJ + centerY);
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
                 }
-            });
-        }, observerOptions);
+            }
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            requestAnimationFrame(drawGlobe);
+        }
+
+        drawGlobe();
     </script>
 </body>
 </html>
