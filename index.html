@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Enzo Ceccarelli | Portfolio du BTS SIO SISR</title>
+    <title>Enzo Ceccarelli | Portfolio BTS SIO SISR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portfolio d'Enzo Ceccarelli - Administration Systèmes, Réseaux & Cybersécurité (BTS SIO SISR)">
 
@@ -326,6 +326,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
         text-transform: uppercase;
+        text-decoration: none;
     }
 
     .btn-primary {
@@ -737,7 +738,7 @@
         </p>
     </footer>
 
-    <!-- DIGITAL GLOBE & INTERACTIVE CANVAS SCRIPT -->
+    <!-- STYLIZED CYBER 3D GLOBE ENGINE -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -765,14 +766,47 @@
             cookieBanner.style.display = 'none';
         });
 
-        // ANIMATION CANVASES
+        // CYBER GLOBE 3D RENDERER
         const canvas = document.getElementById('cyber-canvas');
         const ctx = canvas.getContext('2d');
 
         let width, height;
-        let points = [];
-        const numPoints = 60;
-        const globeRadius = 250;
+        const globeRadius = 260;
+        let rotY = 0;
+        let rotX = 0.3;
+
+        // Génération de la grille filaire (Méridiens & Parallèles)
+        const latLines = 14;
+        const lonLines = 24;
+        const gridPoints = [];
+
+        for (let i = 0; i <= latLines; i++) {
+            const lat = (Math.PI * i) / latLines - Math.PI / 2;
+            const ring = [];
+            for (let j = 0; j < lonLines; j++) {
+                const lon = (2 * Math.PI * j) / lonLines;
+                ring.push({
+                    x: globeRadius * Math.cos(lat) * Math.cos(lon),
+                    y: globeRadius * Math.sin(lat),
+                    z: globeRadius * Math.cos(lat) * Math.sin(lon)
+                });
+            }
+            gridPoints.push(ring);
+        }
+
+        // Génération des Paquets de Données
+        const packets = [];
+        const numPackets = 20;
+
+        for (let i = 0; i < numPackets; i++) {
+            packets.push({
+                latIndex: Math.floor(Math.random() * latLines),
+                lonIndex: Math.floor(Math.random() * lonLines),
+                progress: Math.random(),
+                speed: 0.005 + Math.random() * 0.01,
+                dir: Math.random() > 0.5 ? 'lat' : 'lon'
+            });
+        }
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -781,67 +815,155 @@
         window.addEventListener('resize', resize);
         resize();
 
-        for (let i = 0; i < numPoints; i++) {
-            const theta = Math.acos(2 * Math.random() - 1);
-            const phi = 2 * Math.PI * Math.random();
-            points.push({
-                x: globeRadius * Math.sin(theta) * Math.cos(phi),
-                y: globeRadius * Math.sin(theta) * Math.sin(phi),
-                z: globeRadius * Math.cos(theta)
-            });
-        }
+        function project(p) {
+            // Rotation Y
+            let x1 = p.x * Math.cos(rotY) - p.z * Math.sin(rotY);
+            let z1 = p.z * Math.cos(rotY) + p.x * Math.sin(rotY);
+            // Rotation X
+            let y2 = p.y * Math.cos(rotX) - z1 * Math.sin(rotX);
+            let z2 = z1 * Math.cos(rotX) + p.y * Math.sin(rotX);
 
-        let angleY = 0.002;
-        let angleX = 0.001;
-
-        function drawGlobe() {
-            ctx.clearRect(0, 0, width, height);
-            const centerX = width > 900 ? width * 0.8 : width * 0.5;
+            const scale = 500 / (500 + z2);
+            const centerX = width > 900 ? width * 0.78 : width * 0.5;
             const centerY = height * 0.5;
 
-            points.forEach(p => {
-                let x1 = p.x * Math.cos(angleY) - p.z * Math.sin(angleY);
-                let z1 = p.z * Math.cos(angleY) + p.x * Math.sin(angleY);
-                let y2 = p.y * Math.cos(angleX) - z1 * Math.sin(angleX);
-                let z2 = z1 * Math.cos(angleX) + p.y * Math.sin(angleX);
+            return {
+                x: x1 * scale + centerX,
+                y: y2 * scale + centerY,
+                z: z2,
+                scale: scale
+            };
+        }
 
-                p.x = x1; p.y = y2; p.z = z2;
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            rotY += 0.003;
 
-                const scale = 400 / (400 + p.z);
-                const projX = p.x * scale + centerX;
-                const projY = p.y * scale + centerY;
+            // 1. Dessin du fond glow de la sphère
+            const centerX = width > 900 ? width * 0.78 : width * 0.5;
+            const centerY = height * 0.5;
+            const glowGradient = ctx.createRadialGradient(centerX, centerY, globeRadius * 0.2, centerX, centerY, globeRadius * 1.3);
+            glowGradient.addColorStop(0, 'rgba(0, 240, 255, 0.05)');
+            glowGradient.addColorStop(0.7, 'rgba(112, 0, 255, 0.03)');
+            glowGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = glowGradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, globeRadius * 1.3, 0, Math.PI * 2);
+            ctx.fill();
 
-                const alpha = Math.max(0.1, (p.z + globeRadius) / (2 * globeRadius));
+            // 2. Traçage des Parallèles (Lignes horizontales)
+            for (let i = 1; i < latLines; i++) {
                 ctx.beginPath();
-                ctx.arc(projX, projY, 2 * scale, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 240, 255, ${alpha})`;
-                ctx.fill();
-            });
+                let firstProj = null;
+                for (let j = 0; j <= lonLines; j++) {
+                    const p = gridPoints[i][j % lonLines];
+                    const proj = project(p);
+                    if (j === 0) {
+                        ctx.moveTo(proj.x, proj.y);
+                        firstProj = proj;
+                    } else {
+                        ctx.lineTo(proj.x, proj.y);
+                    }
+                }
+                const alpha = Math.max(0.05, (firstProj.z + globeRadius) / (2 * globeRadius));
+                ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.25})`;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
 
-            for (let i = 0; i < points.length; i++) {
-                for (let j = i + 1; j < points.length; j++) {
-                    const dx = points[i].x - points[j].x;
-                    const dy = points[i].y - points[j].y;
-                    const dz = points[i].z - points[j].z;
-                    const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            // 3. Traçage des Méridiens (Lignes verticales)
+            for (let j = 0; j < lonLines; j++) {
+                ctx.beginPath();
+                for (let i = 0; i <= latLines; i++) {
+                    const p = gridPoints[i][j];
+                    const proj = project(p);
+                    if (i === 0) ctx.moveTo(proj.x, proj.y);
+                    else ctx.lineTo(proj.x, proj.y);
+                }
+                const midProj = project(gridPoints[Math.floor(latLines/2)][j]);
+                const alpha = Math.max(0.05, (midProj.z + globeRadius) / (2 * globeRadius));
+                ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.25})`;
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
 
-                    if (dist < 100) {
-                        const scaleI = 400 / (400 + points[i].z);
-                        const scaleJ = 400 / (400 + points[j].z);
-                        const alpha = (1 - dist / 100) * 0.25;
-
+            // 4. Points d'intersection & Nœuds réseau
+            for (let i = 0; i <= latLines; i++) {
+                for (let j = 0; j < lonLines; j++) {
+                    const proj = project(gridPoints[i][j]);
+                    if (proj.z > -100) { // Ne dessiner que la face avant
+                        const alpha = Math.max(0.1, (proj.z + globeRadius) / (2 * globeRadius));
                         ctx.beginPath();
-                        ctx.moveTo(points[i].x * scaleI + centerX, points[i].y * scaleI + centerY);
-                        ctx.lineTo(points[j].x * scaleJ + centerX, points[j].y * scaleJ + centerY);
-                        ctx.strokeStyle = `rgba(0, 240, 255, ${alpha})`;
-                        ctx.lineWidth = 0.8;
-                        ctx.stroke();
+                        ctx.arc(proj.x, proj.y, 1.5 * proj.scale, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(0, 240, 255, ${alpha * 0.7})`;
+                        ctx.fill();
                     }
                 }
             }
-            requestAnimationFrame(drawGlobe);
+
+            // 5. Anneau Orbital Cyber
+            ctx.beginPath();
+            const ringSegments = 60;
+            const ringRadius = globeRadius * 1.25;
+            for (let i = 0; i <= ringSegments; i++) {
+                const angle = (2 * Math.PI * i) / ringSegments + rotY * 1.5;
+                const p = {
+                    x: ringRadius * Math.cos(angle),
+                    y: ringRadius * Math.sin(angle) * 0.2, // Inclinaison
+                    z: ringRadius * Math.sin(angle)
+                };
+                const proj = project(p);
+                if (i === 0) ctx.moveTo(proj.x, proj.y);
+                else ctx.lineTo(proj.x, proj.y);
+            }
+            ctx.strokeStyle = 'rgba(112, 0, 255, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 6]);
+            ctx.stroke();
+            ctx.setLineDash([]); // Reset line style
+
+            // 6. Animation des Paquets de Données (Data Streams)
+            packets.forEach(pkt => {
+                pkt.progress += pkt.speed;
+                if (pkt.progress >= 1) {
+                    pkt.progress = 0;
+                    pkt.latIndex = Math.floor(Math.random() * latLines);
+                    pkt.lonIndex = Math.floor(Math.random() * lonLines);
+                }
+
+                let p1, p2;
+                if (pkt.dir === 'lat') {
+                    p1 = gridPoints[pkt.latIndex][pkt.lonIndex];
+                    p2 = gridPoints[pkt.latIndex][(pkt.lonIndex + 1) % lonLines];
+                } else {
+                    p1 = gridPoints[pkt.latIndex][pkt.lonIndex];
+                    p2 = gridPoints[(pkt.latIndex + 1) % latLines][pkt.lonIndex];
+                }
+
+                const currentP = {
+                    x: p1.x + (p2.x - p1.x) * pkt.progress,
+                    y: p1.y + (p2.y - p1.y) * pkt.progress,
+                    z: p1.z + (p2.z - p1.z) * pkt.progress
+                };
+
+                const proj = project(currentP);
+
+                if (proj.z > -50) {
+                    const alpha = Math.max(0.2, (proj.z + globeRadius) / (2 * globeRadius));
+                    ctx.beginPath();
+                    ctx.arc(proj.x, proj.y, 3.5 * proj.scale, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 255, 102, ${alpha})`;
+                    ctx.shadowColor = '#00ff66';
+                    ctx.shadowBlur = 10;
+                    ctx.fill();
+                    ctx.shadowBlur = 0; // Reset glow
+                }
+            });
+
+            requestAnimationFrame(animate);
         }
-        drawGlobe();
+
+        animate();
     </script>
 </body>
 </html>
