@@ -1,704 +1,706 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <title>Enzo Ceccarelli | Portfolio BTS SIO SISR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enzo Ceccarelli | Portfolio BTS SIO SISR Cyberpunk</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
+    <meta name="description" content="Portfolio de Enzo Ceccarelli, étudiant en BTS SIO option SISR à Metz.">
+
+    <!-- Favicon (Icône de l'onglet) -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/server.png">
+
+    <!-- Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Orbitron & Rajdhani -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            cyan: '#00f3ff',
-                            red: '#ff0055',
-                            dark: '#030712',
-                            card: 'rgba(10, 15, 30, 0.85)',
-                            border: 'rgba(0, 243, 255, 0.3)'
-                        }
-                    },
-                    fontFamily: {
-                        orbitron: ['Orbitron', 'sans-serif'],
-                        rajdhani: ['Rajdhani', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+
+    <!-- Cloudflare Turnstile CAPTCHA (Anti-Spam) -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
     <style>
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: #030712;
-            color: #e2e8f0;
-            overflow-x: hidden;
-        }
+    /* --------------------
+        CONFIGURATION & VARIABLES
+    --------------------- */
+    :root {
+        --bg: #1e1e1e;
+        --bg-alt: #252526;
+        --primary: #539dff;
+        --primary-dark: #3777c5;
+        --text: #e0e0e0;
+        --muted: #a0a0a0;
+        --border: #333333;
+        --card-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        --transition: all 0.3s ease;
+    }
 
-        /* GIF/Image de Fond avec Overlay Cyberpunk */
-        .cyber-bg {
-            position: fixed;
-            top: 0;
+    html {
+        scroll-behavior: smooth;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+        transition: var(--transition);
+    }
+
+    /* --------------------
+        NAVIGATION
+    --------------------- */
+    header {
+        background: rgba(31, 31, 31, 0.95);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 0;
+    }
+
+    .logo {
+        font-weight: 800;
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 1.5rem;
+        list-style: none;
+        align-items: center;
+    }
+
+    .nav-links a {
+        font-size: 0.9rem;
+        color: var(--muted);
+        font-weight: 500;
+    }
+
+    .nav-links a:hover { color: var(--primary); }
+
+    .nav-social {
+        font-size: 1.1rem;
+        color: var(--primary) !important;
+    }
+
+    .menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    /* --------------------
+        HERO SECTION
+    --------------------- */
+    section { padding: 5rem 0; }
+    section:nth-of-type(even) { background: var(--bg-alt); }
+
+    .hero { padding: 8rem 0; }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 900;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+
+    /* --------------------
+        SECTIONS & CARDS
+    --------------------- */
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 4px;
+        background: var(--primary);
+        margin-top: 10px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .card {
+        background: var(--bg);
+        padding: 2rem;
+        border-radius: 15px;
+        border: 1px solid var(--border);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    section:nth-of-type(even) .card {
+        background: var(--bg);
+    }
+
+    section:nth-of-type(odd) .card {
+        background: var(--bg-alt);
+    }
+
+    .card:hover {
+        border-color: var(--primary);
+        box-shadow: var(--card-shadow);
+        transform: translateY(-5px);
+    }
+
+    .tag {
+        background: #364052;
+        color: #9cbfe8;
+        padding: 0.2rem 0.7rem;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        margin-right: 5px;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    /* --------------------
+        EXPERIENCE PRO (3RHC)
+    --------------------- */
+    .experience-card {
+        border-left: 4px solid var(--primary);
+        padding-left: 1.5rem;
+    }
+
+    .experience-list {
+        list-style: none;
+        margin-top: 1rem;
+    }
+
+    .experience-list li {
+        margin-bottom: 0.5rem;
+        color: var(--muted);
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .experience-list li i {
+        color: var(--primary);
+        margin-top: 5px;
+    }
+
+    /* --------------------
+        COMPÉTENCES
+    --------------------- */
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .skill-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        transition: var(--transition);
+    }
+
+    .skill-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-3px);
+    }
+
+    .skill-card i {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+
+    .skill-card h4 {
+        margin-bottom: 0.8rem;
+        color: #fff;
+    }
+
+    .skill-card ul {
+        list-style: none;
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .skill-card ul li {
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .skill-card ul li::before {
+        content: "▹";
+        color: var(--primary);
+    }
+
+    /* --------------------
+        BOUTONS
+    --------------------- */
+    .btn {
+        padding: 0.8rem 1.8rem;
+        border-radius: 50px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+    .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
+    .btn-outline:hover { background: var(--primary); color: #fff; transform: translateY(-2px); }
+
+    /* --------------------
+        ANIMATIONS (REVEAL)
+    --------------------- */
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease;
+    }
+
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    footer {
+        padding: 2rem 0;
+        text-align: center;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+    }
+
+    /* Responsive Navbar */
+    @media (max-width: 768px) {
+        .menu-btn { display: block; }
+        .nav-links {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            /* Insertion directe de votre image/GIF */
-            background-image: url('télécharger_2.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: -2;
-            filter: brightness(0.65) contrast(1.1);
+            width: 100%;
+            background: var(--bg-alt);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            gap: 1rem;
         }
-
-        /* Overlay canvas pour particules et grille */
-        .cyber-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(180deg, rgba(3,7,18,0.4) 0%, rgba(3,7,18,0.85) 100%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Glow & Neon Effects */
-        .neon-border-cyan {
-            border: 1px solid rgba(0, 243, 255, 0.4);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2), inset 0 0 15px rgba(0, 243, 255, 0.1);
-        }
-        .neon-border-red {
-            border: 1px solid rgba(255, 0, 85, 0.4);
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.2), inset 0 0 15px rgba(255, 0, 85, 0.1);
-        }
-        .neon-text-cyan {
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.4);
-        }
-        .neon-text-red {
-            text-shadow: 0 0 8px rgba(255, 0, 85, 0.7), 0 0 20px rgba(255, 0, 85, 0.4);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #030712;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #00f3ff;
-            border-radius: 4px;
-            box-shadow: 0 0 10px #00f3ff;
-        }
-
-        /* Animation de slide / scroll FX */
-        .section-slide {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .section-slide.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Clip Path Cyber Button */
-        .cyber-btn {
-            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-            transition: all 0.3s ease;
-        }
-        .cyber-btn:hover {
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
-            transform: translateY(-2px);
-        }
+        .nav-links.active { display: flex; }
+    }
     </style>
 </head>
-<body class="relative">
+<body>
 
-    <!-- ARRIÈRE-PLAN AVEC IMAGE/GIF ET CANVAS OVERLAY -->
-    <div class="cyber-bg"></div>
-    <div class="cyber-overlay"></div>
-    <canvas id="particles-canvas" class="fixed inset-0 pointer-events-none z-[-1]"></canvas>
-
-    <!-- ECRAN DE BOOT TERMINAL (Matrix/Cyber Boot) -->
-    <div id="boot-screen" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center font-mono p-4">
-        <div class="max-w-xl w-full text-left space-y-2 text-xs md:text-sm">
-            <p class="text-cyber-cyan">[SYS_INIT] Initialisation du système SIO SISR v4.0.2...</p>
-            <p class="text-gray-500">[LOG] Chargement du module réseau & sécurité...</p>
-            <p class="text-gray-500">[LOG] Connexion aux nœuds de données PDF & Épreuves E4/E5...</p>
-            <p class="text-cyber-red">[OK] Fond 'télécharger_2.jpg' injecté avec succès.</p>
-            <div class="w-full bg-gray-900 h-2 rounded overflow-hidden my-4 border border-cyber-cyan/50">
-                <div id="boot-progress" class="bg-gradient-to-r from-cyber-cyan to-cyber-red h-full w-0 transition-all duration-1000"></div>
-            </div>
-            <p id="boot-status" class="text-cyber-cyan animate-pulse">&gt; Démarrage du profil d'Enzo Ceccarelli...</p>
+    <header>
+        <div class="container navbar">
+            <div class="logo">ENZO CECCARELLI</div>
+            <button class="menu-btn" id="menu-toggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+            <nav>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#accueil">Accueil</a></li>
+                    <li><a href="#apropos">À propos</a></li>
+                    <li><a href="#experience">Expérience</a></li>
+                    <li><a href="#competences">Compétences</a></li>
+                    <li><a href="#projets">Projets</a></li>
+                    <li><a href="#epreuve-e4">Épreuve E4</a></li>
+                    <li><a href="#veille">Veille Tech</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <!-- Remplacer le '#' par ton vrai lien LinkedIn -->
+                    <li><a href="https://linkedin.com" target="_blank" class="nav-social" title="Mon LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+                </ul>
+            </nav>
         </div>
-        <button id="skip-boot" onclick="finishBoot()" class="mt-6 text-xs text-gray-400 hover:text-cyber-cyan underline">Accéder immédiatement [SKIP]</button>
-    </div>
+    </header>
 
-    <!-- NAVBAR NAVIGATION -->
-    <nav class="fixed top-0 left-0 w-full z-40 bg-gray-950/80 backdrop-blur-md border-b border-cyber-cyan/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-3">
-                    <span class="text-cyber-cyan font-orbitron font-extrabold text-xl tracking-wider">
-                        EC<span class="text-cyber-red">_</span>SISR
-                    </span>
-                    <span class="hidden sm:inline-block text-xs bg-cyber-cyan/10 text-cyber-cyan px-2 py-0.5 rounded border border-cyber-cyan/30">
-                        BTS SIO
-                    </span>
-                </div>
-                <!-- Menu Desktop -->
-                <div class="hidden md:flex space-x-6 text-sm font-orbitron uppercase tracking-wider">
-                    <a href="#accueil" class="hover:text-cyber-cyan transition-colors py-1 border-b-2 border-transparent hover:border-cyber-cyan">Accueil</a>
-                    <a href="#apropos" class="hover:text-cyber-cyan transition-colors py-1 border-b-2 border-transparent hover:border-cyber-cyan">À Propos</a>
-                    <a href="#competences" class="hover:text-cyber-cyan transition-colors py-1 border-b-2 border-transparent hover:border-cyber-cyan">Compétences</a>
-                    <a href="#e4-e5" class="hover:text-cyber-cyan transition-colors py-1 border-b-2 border-transparent hover:border-cyber-cyan">Épreuves E4/E5</a>
-                    <a href="#projets" class="hover:text-cyber-cyan transition-colors py-1 border-b-2 border-transparent hover:border-cyber-cyan">Projets</a>
-                    <a href="#contact" class="hover:text-cyber-cyan transition-colors py-1 border-b-2 border-transparent hover:border-cyber-cyan">Contact</a>
-                </div>
-                <!-- Mobile Menu Button -->
-                <button onclick="toggleMobileMenu()" class="md:hidden text-cyber-cyan text-2xl focus:outline-none">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-950/95 border-b border-cyber-cyan/30 px-4 pt-2 pb-4 space-y-2 font-orbitron text-sm">
-            <a href="#accueil" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-cyan">Accueil</a>
-            <a href="#apropos" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-cyan">À Propos</a>
-            <a href="#competences" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-cyan">Compétences</a>
-            <a href="#e4-e5" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-cyan">Épreuves E4/E5</a>
-            <a href="#projets" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-cyan">Projets</a>
-            <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-gray-300 hover:text-cyber-cyan">Contact</a>
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 space-y-32">
-
-        <!-- SECTION 1: ACCUEIL / HERO -->
-        <section id="accueil" class="min-h-[80vh] flex flex-col justify-center items-start section-slide">
-            <div class="inline-flex items-center space-x-2 bg-cyber-red/10 border border-cyber-red/40 px-3 py-1 rounded-full text-cyber-red text-xs font-mono mb-4">
-                <span class="w-2 h-2 rounded-full bg-cyber-red animate-ping"></span>
-                <span>Système Opérationnel &bull; Spécialité SISR</span>
-            </div>
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-orbitron font-black text-white tracking-tight mb-4">
-                ENZO <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-cyber-red neon-text-cyan">CECCARELLI</span>
-            </h1>
-            <p class="text-xl sm:text-2xl text-gray-300 max-w-2xl font-light mb-8">
-                Administrateur Systèmes & Réseaux &bull; Passionné de Cybersécurité et d'Infrastructures Virtuelles en formation BTS SIO SISR.
-            </p>
-
-            <!-- BOUTONS D'ACTION AVEC LIENS PDF RETABLIS -->
-            <div class="flex flex-wrap gap-4">
-                <a href="#e4-e5" class="cyber-btn bg-cyber-cyan text-gray-950 font-orbitron font-bold px-6 py-3 flex items-center gap-2 hover:bg-cyan-300 transition-all">
-                    <i class="fas fa-folder-open"></i> Voir Fiches E4/E5
-                </a>
-                <button onclick="openPdfModal('documents/CV_Enzo_Ceccarelli.pdf', 'CV Enzo Ceccarelli')" class="cyber-btn bg-transparent text-cyber-cyan border border-cyber-cyan font-orbitron font-semibold px-6 py-3 flex items-center gap-2 hover:bg-cyber-cyan/10 transition-all">
-                    <i class="fas fa-file-pdf text-cyber-red"></i> Mon CV (PDF)
-                </button>
+    <main>
+        <!-- HERO -->
+        <section id="accueil" class="hero">
+            <div class="container reveal">
+                <h1 class="hero-title">Enzo Ceccarelli</h1>
+                <p class="hero-subtitle">Étudiant BTS SIO Option SISR</p>
+                <p style="max-width: 650px; font-size: 1.1rem;">
+                    Alternant au sein du 3ᵉ Régiment d'Hélicoptères de Combat (3RHC) à Étain, je me spécialise dans l'administration des infrastructures réseaux, le support utilisateur et la sécurité informatique.
+                </p>
             </div>
         </section>
 
-        <!-- SECTION 2: À PROPOS -->
-        <section id="apropos" class="section-slide">
-            <div class="flex items-center space-x-4 mb-8">
-                <h2 class="text-3xl font-orbitron font-bold text-white neon-text-cyan">&gt; 01. À PROPOS</h2>
-                <div class="h-[1px] flex-1 bg-gradient-to-r from-cyber-cyan/50 to-transparent"></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 bg-cyber-card p-6 sm:p-8 rounded-lg neon-border-cyan backdrop-blur-md space-y-4">
-                    <h3 class="text-xl font-orbitron font-semibold text-cyber-cyan">Profil Administrateur SISR</h3>
-                    <p class="text-gray-300 leading-relaxed">
-                        Étudiant en BTS SIO (Services Informatiques aux Organisations), option SISR (Solutions d'Infrastructure, Systèmes et Réseaux). Je me spécialise dans le déploiement, la sécurisation et la maintenance des infrastructures réseaux et serveurs entreprise.
-                    </p>
-                    <p class="text-gray-300 leading-relaxed">
-                        Ma passion réside dans l'architecture réseau, la virtualisation (Proxmox/ESXi), la sécurité informatique et l'automatisation.
-                    </p>
-
-                    <!-- badges -->
-                    <div class="pt-4 flex flex-wrap gap-2 text-xs font-mono">
-                        <span class="bg-gray-900 border border-cyber-cyan/40 px-3 py-1 rounded text-cyber-cyan">Cisco Packet Tracer</span>
-                        <span class="bg-gray-900 border border-cyber-cyan/40 px-3 py-1 rounded text-cyber-cyan">Active Directory / Windows Server</span>
-                        <span class="bg-gray-900 border border-cyber-cyan/40 px-3 py-1 rounded text-cyber-cyan">Linux (Debian/Ubuntu)</span>
-                        <span class="bg-gray-900 border border-cyber-cyan/40 px-3 py-1 rounded text-cyber-cyan">Virtualisation Proxmox</span>
-                        <span class="bg-gray-900 border border-cyber-cyan/40 px-3 py-1 rounded text-cyber-cyan">VLAN & VPN</span>
+        <!-- A PROPOS -->
+        <section id="apropos">
+            <div class="container">
+                <h2 class="section-title">À propos de moi</h2>
+                <div class="grid">
+                    <div class="card reveal">
+                        <div>
+                            <h3>Mon Parcours</h3>
+                            <p style="margin-top: 10px;">Après un parcours en Gestion-Finance, j'ai décidé de me réorienter vers ma passion initiale : l'informatique. Mon projet est d'évoluer vers une Licence en Cybersécurité.</p>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <a href="mon_cv_enzo.html" target="_blank" class="btn btn-outline">
+                                <i class="fas fa-file-pdf"></i> Télécharger mon CV
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card reveal">
+                        <div>
+                            <h3>Informations</h3>
+                            <p style="margin-top: 10px;"><strong>Âge :</strong> 24 ans</p>
+                            <p><strong>Lieu :</strong> Hussigny-Godbrange</p>
+                            <p><strong>École :</strong> Campus MEWO Metz</p>
+                            <p><strong>Entreprise :</strong> 3RHC Étain (Alternance)</p>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- CARTE DE TELECHARGEMENTS DIRECTS PDF -->
-                <div class="bg-cyber-card p-6 rounded-lg neon-border-red backdrop-blur-md flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-orbitron font-semibold text-cyber-red mb-4 flex items-center gap-2">
-                            <i class="fas fa-file-download"></i> Documents Clés
-                        </h3>
-                        <p class="text-xs text-gray-400 mb-4">Accès direct aux fichiers officiels PDF du BTS :</p>
-                        
-                        <ul class="space-y-3">
-                            <li>
-                                <button onclick="openPdfModal('documents/CV_Enzo_Ceccarelli.pdf', 'CV Enzo Ceccarelli')" class="w-full text-left p-2.5 rounded bg-gray-900/80 border border-gray-700 hover:border-cyber-cyan text-sm flex items-center justify-between text-gray-200 transition-colors">
-                                    <span class="flex items-center gap-2"><i class="fas fa-id-card text-cyber-cyan"></i> CV Officiel</span>
-                                    <i class="fas fa-eye text-xs text-gray-400"></i>
-                                </button>
-                            </li>
-                            <li>
-                                <button onclick="openPdfModal('documents/Tableau_de_Synthese_E4.pdf', 'Tableau de Synthèse E4')" class="w-full text-left p-2.5 rounded bg-gray-900/80 border border-gray-700 hover:border-cyber-cyan text-sm flex items-center justify-between text-gray-200 transition-colors">
-                                    <span class="flex items-center gap-2"><i class="fas fa-table text-cyber-cyan"></i> Tableau de Synthèse E4</span>
-                                    <i class="fas fa-eye text-xs text-gray-400"></i>
-                                </button>
-                            </li>
-                            <li>
-                                <button onclick="openPdfModal('documents/Rapport_de_Stage.pdf', 'Rapport de Stage BTS')" class="w-full text-left p-2.5 rounded bg-gray-900/80 border border-gray-700 hover:border-cyber-cyan text-sm flex items-center justify-between text-gray-200 transition-colors">
-                                    <span class="flex items-center gap-2"><i class="fas fa-book text-cyber-cyan"></i> Rapport de Stage</span>
-                                    <i class="fas fa-eye text-xs text-gray-400"></i>
-                                </button>
-                            </li>
+        <!-- EXPERIENCE PROFESSIONNELLE (3RHC) -->
+        <section id="experience">
+            <div class="container">
+                <h2 class="section-title">Expérience en Alternance</h2>
+                <div class="card reveal experience-card">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h3>Technicien Informatique & Réseaux (Alternant)</h3>
+                            <p style="color: var(--primary); font-weight: 600;">3ᵉ Régiment d'Hélicoptères de Combat (3RHC) — Étain</p>
+                        </div>
+                        <span class="tag" style="font-size: 0.9rem; padding: 0.4rem 0.8rem;">SISR / Support & Parc</span>
+                    </div>
+
+                    <p style="margin-top: 15px; font-size: 0.95rem;">
+                        Au sein de la cellule informatique du régiment, j'assure le maintien en condition opérationnelle du parc informatique et l'assistance technique auprès des utilisateurs.
+                    </p>
+
+                    <ul class="experience-list">
+                        <li><i class="fas fa-check-circle"></i> <span><strong>Support Helpdesk N1/N2 :</strong> Assistance aux utilisateurs et résolution d'incidents matériels et logiciels.</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span><strong>Gestion du Parc Informatique :</strong> Suivi de l'inventaire, masterisation, installation et déploiement des postes de travail.</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span><strong>Contrôle des Accès :</strong> Réinitialisation de mots de passe et gestion des droits d'accès aux groupes fonctionnels.</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span><strong>Configurations Spécifiques :</strong> Préparation sur-mesure de postes clients selon les besoins métiers et configuration de flottes de tablettes.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPETENCES SISR -->
+        <section id="competences">
+            <div class="container">
+                <h2 class="section-title">Compétences Techniques</h2>
+                <div class="skills-grid">
+                    <div class="skill-card reveal">
+                        <i class="fas fa-network-wired"></i>
+                        <h4>Réseaux & Commutateurs</h4>
+                        <ul>
+                            <li>Cisco Packet Tracer</li>
+                            <li>VLANs, Trunking, Inter-VLAN</li>
+                            <li>ACL & Sécurité d'accès</li>
+                            <li>Routage statique & dynamique</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card reveal">
+                        <i class="fas fa-server"></i>
+                        <h4>Administration Systèmes</h4>
+                        <ul>
+                            <li>Windows Server (AD DS, DNS, DHCP, GPO)</li>
+                            <li>Linux (Ubuntu Server, Debian)</li>
+                            <li>Gestion des utilisateurs & droits</li>
+                            <li>Hardening d'OS</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card reveal">
+                        <i class="fas fa-cubes"></i>
+                        <h4>Virtualisation & Cloud</h4>
+                        <ul>
+                            <li>VMware ESXi / Workstation</li>
+                            <li>VirtualBox</li>
+                            <li>Gestion des Snapshots & VSwitches</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card reveal">
+                        <i class="fas fa-shield-halved"></i>
+                        <h4>Sécurité & Scripting</h4>
+                        <ul>
+                            <li>Analyse de trames (Wireshark)</li>
+                            <li>Scans de vulnérabilités (Nmap)</li>
+                            <li>Scripting PowerShell & Bash</li>
+                            <li>Sensibilisation aux bonnes pratiques</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 3: COMPÉTENCES BTS SISR -->
-        <section id="competences" class="section-slide">
-            <div class="flex items-center space-x-4 mb-8">
-                <h2 class="text-3xl font-orbitron font-bold text-white neon-text-cyan">&gt; 02. COMPÉTENCES SISR</h2>
-                <div class="h-[1px] flex-1 bg-gradient-to-r from-cyber-cyan/50 to-transparent"></div>
-            </div>
+        <!-- PROJETS & TRAVAUX PRATIQUES -->
+        <section id="projets">
+            <div class="container">
+                <h2 class="section-title">Projets & Travaux Pratiques</h2>
+                <div class="grid">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Skill 1 -->
-                <div class="bg-cyber-card p-6 rounded-lg border border-cyber-cyan/30 hover:border-cyber-cyan transition-all">
-                    <div class="text-cyber-cyan text-3xl mb-3"><i class="fas fa-network-wired"></i></div>
-                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Réseaux & Commutation</h3>
-                    <p class="text-sm text-gray-400">Configuration de VLANs, routage inter-VLAN, modèles OSI/TCP-IP, adressage IPv4/IPv6, règles de pare-feu PfSense.</p>
-                </div>
-                <!-- Skill 2 -->
-                <div class="bg-cyber-card p-6 rounded-lg border border-cyber-cyan/30 hover:border-cyber-cyan transition-all">
-                    <div class="text-cyber-cyan text-3xl mb-3"><i class="fas fa-server"></i></div>
-                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Administration Systèmes</h3>
-                    <p class="text-sm text-gray-400">Windows Server (Active Directory, DNS, DHCP, GPO) et Serveurs Linux (SSH, Apache, Nginx, Bind9).</p>
-                </div>
-                <!-- Skill 3 -->
-                <div class="bg-cyber-card p-6 rounded-lg border border-cyber-cyan/30 hover:border-cyber-cyan transition-all">
-                    <div class="text-cyber-cyan text-3xl mb-3"><i class="fas fa-cubes"></i></div>
-                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Virtualisation</h3>
-                    <p class="text-sm text-gray-400">Déploiement d'hyperviseurs Proxmox VE et VMware ESXi, conteneurisation Docker, haute disponibilité et backups.</p>
-                </div>
-                <!-- Skill 4 -->
-                <div class="bg-cyber-card p-6 rounded-lg border border-cyber-cyan/30 hover:border-cyber-cyan transition-all">
-                    <div class="text-cyber-cyan text-3xl mb-3"><i class="fas fa-shield-halved"></i></div>
-                    <h3 class="font-orbitron font-bold text-lg text-white mb-2">Sécurité & Supervision</h3>
-                    <p class="text-sm text-gray-400">Supervision système via Zabbix/Nagios, audits de vulnérabilités, VPN IPsec/OpenVPN, sauvegardes certifiées.</p>
+                    <!-- TP 1 -->
+                    <article class="card reveal">
+                        <div>
+                            <div style="margin-bottom: 10px;">
+                                <span class="tag">VMware</span>
+                                <span class="tag">pfSense</span>
+                                <span class="tag">WordPress</span>
+                                <span class="tag">NextCloud</span>
+                            </div>
+                            <h3>TP Parc informatique (BYFECT v4)</h3>
+                            <p style="margin-top: 10px;">Déploiement complet d'une infrastructure réseau sous VMware pour l'entreprise fictive BYFECT v4.</p>
+                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
+                                <li>Mise en place d'un pare-feu pfSense avec règles LAN/WAN.</li>
+                                <li>Hébergement d'un serveur Web Apache2 avec Nextcloud & WordPress.</li>
+                                <li>Interconnexion et routage des postes clients Ubuntu.</li>
+                            </ul>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="TP BYFECT v4 Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- TP 2 -->
+                    <article class="card reveal">
+                        <div>
+                            <div style="margin-bottom: 10px;">
+                                <span class="tag">pfSense</span>
+                                <span class="tag">Firewall</span>
+                                <span class="tag">VMware</span>
+                            </div>
+                            <h3>TP Pare-feu pfSense</h3>
+                            <p style="margin-top: 10px;">Installation, initialisation et sécurisation de l'hyperviseur pare-feu open source pfSense.</p>
+                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
+                                <li>Attribution et adressage des cartes réseau WAN et LAN.</li>
+                                <li>Configuration de l'interface Web d'administration GUI.</li>
+                                <li>Mise en place de règles de routage et de filtrage d'accès.</li>
+                            </ul>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="TP PFSENSE Enzo Ceccarelli.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- TP 3 -->
+                    <article class="card reveal">
+                        <div>
+                            <div style="margin-bottom: 10px;">
+                                <span class="tag">LAMP</span>
+                                <span class="tag">MySQL/MariaDB</span>
+                                <span class="tag">Apache</span>
+                            </div>
+                            <h3>TP phpMyAdmin & WordPress</h3>
+                            <p style="margin-top: 10px;">Installation et administration d'une pile Web LAMP complète sur un serveur Linux Ubuntu.</p>
+                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
+                                <li>Configuration des VirtualHosts sous Apache2.</li>
+                                <li>Création et gestion des bases de données via phpMyAdmin.</li>
+                                <li>Déploiement et sécurisation de l'application WordPress.</li>
+                            </ul>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="TP PHPMYADMIN WordPress.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- TP 4 -->
+                    <article class="card reveal">
+                        <div>
+                            <div style="margin-bottom: 10px;">
+                                <span class="tag">GLPI</span>
+                                <span class="tag">Gestion de Parc</span>
+                                <span class="tag">ITSM</span>
+                            </div>
+                            <h3>TP Serveur GLPI v10</h3>
+                            <p style="margin-top: 10px;">Déploiement d'une solution de gestion d'inventaire informatique et de gestion d'incidents (Helpdesk).</p>
+                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
+                                <li>Installation des dépendances PHP et bases de données MariaDB.</li>
+                                <li>Gestion des profils, droits utilisateurs et groupes d'assistance.</li>
+                                <li>Déploiement et remontée automatique des agents d'inventaire.</li>
+                            </ul>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="TP serveur GLPI Installation.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- TP 5 -->
+                    <article class="card reveal">
+                        <div>
+                            <div style="margin-bottom: 10px;">
+                                <span class="tag">OPNsense</span>
+                                <span class="tag">Sécurité</span>
+                                <span class="tag">Réseau</span>
+                            </div>
+                            <h3>TP Installation OPNsense</h3>
+                            <p style="margin-top: 10px;">Déploiement et mise en service du pare-feu et routeur open-source OPNsense.</p>
+                            <ul style="margin-top: 10px; font-size: 0.85rem; color: var(--muted); list-style: disc; padding-left: 15px;">
+                                <li>Affectation des rôles d'interfaces physiques et virtuelles (LAN/WAN).</li>
+                                <li>Gestion des règles de sécurité du pare-feu et translation d'adresses (NAT).</li>
+                                <li>Comparatif des fonctionnalités de sécurité par rapport à pfSense.</li>
+                            </ul>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="TP_OPNsense.pdf" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                <i class="fas fa-file-pdf"></i> Voir le TP (PDF)
+                            </a>
+                        </div>
+                    </article>
+
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 4: ÉPREUVES E4 ET E5 (ACCÈS FICHIERS PDF COMPLET) -->
-        <section id="e4-e5" class="section-slide">
-            <div class="flex items-center space-x-4 mb-8">
-                <h2 class="text-3xl font-orbitron font-bold text-white neon-text-red">&gt; 03. ÉPREUVES BTS (E4 & E5)</h2>
-                <div class="h-[1px] flex-1 bg-gradient-to-r from-cyber-red/50 to-transparent"></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- BLOC EPREUVE E4 -->
-                <div class="bg-cyber-card p-6 sm:p-8 rounded-lg neon-border-cyan backdrop-blur-md">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-2xl font-orbitron font-bold text-cyber-cyan">Épreuve E4 - Portefeuille de Compétences</h3>
-                        <span class="bg-cyber-cyan/20 text-cyber-cyan px-2.5 py-1 rounded text-xs font-mono">CCF / Oral</span>
-                    </div>
-                    <p class="text-sm text-gray-300 mb-6">
-                        Support de présentation des réalisations professionnelles acquises au cours de la formation et des stages en entreprise.
+        <!-- EPREUVE E4 & TABLEAU DE SYNTHESE -->
+        <section id="epreuve-e4">
+            <div class="container">
+                <h2 class="section-title">Portefeuille de Compétences (Épreuve E4)</h2>
+                <div class="card reveal">
+                    <h3>Tableau de Synthèse Épreuve E5 / E4</h3>
+                    <p style="margin: 1rem 0;">
+                        Retrouvez ci-dessous mon tableau de synthèse officiel (Session 2026). Ce document récapitule l'ensemble de mes réalisations professionnelles en entreprise (3RHC) et en centre de formation (Campus MEWO), ainsi que le croisement avec le référentiel du BTS SIO SISR (gestion du patrimoine, réponse aux incidents, travail en mode projet, etc.).
                     </p>
-
-                    <div class="space-y-3">
-                        <div class="p-4 bg-gray-950/80 rounded border border-cyber-cyan/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div>
-                                <h4 class="font-bold text-white text-sm">Tableau de Synthèse E4</h4>
-                                <p class="text-xs text-gray-400">Grille récapitulative officielle des compétences SISR</p>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="openPdfModal('documents/Tableau_de_Synthese_E4.pdf', 'Tableau de Synthèse E4')" class="px-3 py-1.5 bg-cyber-cyan/20 text-cyber-cyan hover:bg-cyber-cyan hover:text-black border border-cyber-cyan text-xs font-orbitron rounded transition-all">
-                                    <i class="fas fa-eye"></i> Ouvrir
-                                </button>
-                                <a href="documents/Tableau_de_Synthese_E4.pdf" download class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-orbitron rounded border border-gray-600">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="p-4 bg-gray-950/80 rounded border border-cyber-cyan/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div>
-                                <h4 class="font-bold text-white text-sm">Fiche E4 - Migration Active Directory</h4>
-                                <p class="text-xs text-gray-400">Projet d'infrastructure contrôleur de domaine</p>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="openPdfModal('documents/Fiche_E4_Active_Directory.pdf', 'Fiche E4 - Active Directory')" class="px-3 py-1.5 bg-cyber-cyan/20 text-cyber-cyan hover:bg-cyber-cyan hover:text-black border border-cyber-cyan text-xs font-orbitron rounded transition-all">
-                                    <i class="fas fa-eye"></i> Ouvrir
-                                </button>
-                                <a href="documents/Fiche_E4_Active_Directory.pdf" download class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-orbitron rounded border border-gray-600">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <a href="BTS_SIO_Annexe_VI.5_Epreuve E5 - Tableau de synthe_se_2026.xlsx - Tableau de synthèse Épreuve E5.pdf" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-file-pdf"></i> Télécharger le Tableau de Synthèse 2026 (PDF)
+                    </a>
                 </div>
-
-                <!-- BLOC EPREUVE E5 -->
-                <div class="bg-cyber-card p-6 sm:p-8 rounded-lg neon-border-red backdrop-blur-md">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-2xl font-orbitron font-bold text-cyber-red">Épreuve E5 - Production de Services</h3>
-                        <span class="bg-cyber-red/20 text-cyber-red px-2.5 py-1 rounded text-xs font-mono">Projet In Situ</span>
-                    </div>
-                    <p class="text-sm text-gray-300 mb-6">
-                        Mise en place de solutions réseau/système adaptées aux besoins de l'entreprise avec documentation technique associée.
-                    </p>
-
-                    <div class="space-y-3">
-                        <div class="p-4 bg-gray-950/80 rounded border border-cyber-red/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div>
-                                <h4 class="font-bold text-white text-sm">Fiche E5 - Déploiement Supervision Zabbix</h4>
-                                <p class="text-xs text-gray-400">Mise en place d'alertes & agents SNMP</p>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="openPdfModal('documents/Fiche_E5_Supervision_Zabbix.pdf', 'Fiche E5 - Zabbix')" class="px-3 py-1.5 bg-cyber-red/20 text-cyber-red hover:bg-cyber-red hover:text-white border border-cyber-red text-xs font-orbitron rounded transition-all">
-                                    <i class="fas fa-eye"></i> Ouvrir
-                                </button>
-                                <a href="documents/Fiche_E5_Supervision_Zabbix.pdf" download class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-orbitron rounded border border-gray-600">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="p-4 bg-gray-950/80 rounded border border-cyber-red/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div>
-                                <h4 class="font-bold text-white text-sm">Fiche E5 - Architecture cluster Proxmox</h4>
-                                <p class="text-xs text-gray-400">Virtualisation haute disponibilité et ceph storage</p>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="openPdfModal('documents/Fiche_E5_Proxmox_HA.pdf', 'Fiche E5 - Proxmox')" class="px-3 py-1.5 bg-cyber-red/20 text-cyber-red hover:bg-cyber-red hover:text-white border border-cyber-red text-xs font-orbitron rounded transition-all">
-                                    <i class="fas fa-eye"></i> Ouvrir
-                                </button>
-                                <a href="documents/Fiche_E5_Proxmox_HA.pdf" download class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs font-orbitron rounded border border-gray-600">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- SECTION 5: PROJETS RÉALISÉS -->
-        <section id="projets" class="section-slide">
-            <div class="flex items-center space-x-4 mb-8">
-                <h2 class="text-3xl font-orbitron font-bold text-white neon-text-cyan">&gt; 04. PROJETS RÉALISÉS</h2>
-                <div class="h-[1px] flex-1 bg-gradient-to-r from-cyber-cyan/50 to-transparent"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Projet 1 -->
-                <div class="bg-cyber-card rounded-lg overflow-hidden border border-cyber-cyan/30 hover:border-cyber-cyan transition-all flex flex-col justify-between">
-                    <div class="p-6">
-                        <div class="text-xs font-mono text-cyber-cyan mb-2">[INFRASTRUCTURE & SÉCURITÉ]</div>
-                        <h3 class="text-xl font-orbitron font-bold text-white mb-2">Segmentation VLAN & PfSense</h3>
-                        <p class="text-sm text-gray-300">Conception et sécurisation du réseau d'entreprise avec pare-feu PfSense, VLANs isolés et VPN IPsec multi-site.</p>
+        <!-- VEILLE TECHNOLOGIQUE -->
+        <section id="veille">
+            <div class="container">
+                <h2 class="section-title">Veille Technologique</h2>
+                <div class="grid">
+                    <div class="card reveal">
+                        <h3><i class="fas fa-rss" style="color:var(--primary); margin-right:8px;"></i> Méthodologie & Outils</h3>
+                        <p style="margin-top:10px;">Afin de maintenir mes compétences à jour et d'anticiper les vulnérabilités réseaux, j'utilise un processus de veille régulier :</p>
+                        <ul style="margin-top: 10px; font-size: 0.9rem; color: var(--muted); padding-left: 20px;">
+                            <li><strong>Agrégation de flux :</strong> Feedly (Abonnements aux flux RSS spécialisés).</li>
+                            <li><strong>Sources institutionnelles :</strong> CERT-FR, ANSSI (Bulletins d'alerte et de sécurité).</li>
+                            <li><strong>Médias spécialisés :</strong> IT-Connect, ZDNet.</li>
+                        </ul>
                     </div>
-                    <div class="p-6 pt-0">
-                        <button onclick="openPdfModal('documents/Doc_Tech_PfSense.pdf', 'Doc Technique PfSense')" class="text-xs font-orbitron text-cyber-cyan hover:underline flex items-center gap-2">
-                            <i class="fas fa-file-pdf"></i> Voir la documentation (PDF)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Projet 2 -->
-                <div class="bg-cyber-card rounded-lg overflow-hidden border border-cyber-cyan/30 hover:border-cyber-cyan transition-all flex flex-col justify-between">
-                    <div class="p-6">
-                        <div class="text-xs font-mono text-cyber-cyan mb-2">[SYSTEME & SERVICES]</div>
-                        <h3 class="text-xl font-orbitron font-bold text-white mb-2">Migration Windows Server 2022</h3>
-                        <p class="text-sm text-gray-300">Déploiement Active Directory, gestion centralisée des utilisateurs, règles GPO sécurisées et serveur de fichiers DFS.</p>
-                    </div>
-                    <div class="p-6 pt-0">
-                        <button onclick="openPdfModal('documents/Doc_Tech_Windows_Server.pdf', 'Doc Technique Windows Server')" class="text-xs font-orbitron text-cyber-cyan hover:underline flex items-center gap-2">
-                            <i class="fas fa-file-pdf"></i> Voir la documentation (PDF)
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Projet 3 -->
-                <div class="bg-cyber-card rounded-lg overflow-hidden border border-cyber-cyan/30 hover:border-cyber-cyan transition-all flex flex-col justify-between">
-                    <div class="p-6">
-                        <div class="text-xs font-mono text-cyber-cyan mb-2">[SUPERVISION & CLOUD]</div>
-                        <h3 class="text-xl font-orbitron font-bold text-white mb-2">Infrastructure Cloud & Docker</h3>
-                        <p class="text-sm text-gray-300">Mise en place de conteneurs Docker sous Debian pour héberger des micro-services surveillés en temps réel par Zabbix.</p>
-                    </div>
-                    <div class="p-6 pt-0">
-                        <button onclick="openPdfModal('documents/Doc_Tech_Docker_Zabbix.pdf', 'Doc Technique Docker')" class="text-xs font-orbitron text-cyber-cyan hover:underline flex items-center gap-2">
-                            <i class="fas fa-file-pdf"></i> Voir la documentation (PDF)
-                        </button>
+                    <div class="card reveal">
+                        <h3><i class="fas fa-shield-halved" style="color:var(--primary); margin-right:8px;"></i> Sujet : Sécurisation des Accès & Hardening</h3>
+                        <div style="margin-top: 10px;">
+                            <span class="tag">Gestion des Privilèges</span>
+                            <span class="tag">MFA / Directives ANSSI</span>
+                            <span class="tag">Hardening OS</span>
+                            <span class="tag">Gestion des Patchs</span>
+                        </div>
+                        <p style="margin-top:15px; font-size: 0.9rem;">
+                            Ma veille porte sur les bonnes pratiques de **sécurisation des systèmes (Windows/Linux)** et la **protection des accès réseaux**. Je me concentre sur l'application du principe du moindre privilège, le déploiement de l'authentification multifacteur (MFA) et le suivi des vulnérabilités critiques (Patch Management).
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION 6: CONTACT -->
-        <section id="contact" class="section-slide">
-            <div class="flex items-center space-x-4 mb-8">
-                <h2 class="text-3xl font-orbitron font-bold text-white neon-text-cyan">&gt; 05. CONTACT</h2>
-                <div class="h-[1px] flex-1 bg-gradient-to-r from-cyber-cyan/50 to-transparent"></div>
-            </div>
+        <!-- CONTACT AVEC CAPTCHA -->
+        <section id="contact">
+            <div class="container">
+                <h2 class="section-title">Contact</h2>
+                <div class="reveal" style="max-width: 600px; margin: 0 auto;">
+                    <form action="https://formspree.io/f/manrdvlg" method="POST" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                        <input type="text" name="name" placeholder="Votre Nom / Prénom" required style="padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: #fff;">
+                        <input type="email" name="email" placeholder="Votre Email" required style="padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: #fff;">
+                        <textarea name="message" placeholder="Votre message..." rows="5" required style="padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: #fff;"></textarea>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-cyber-card p-6 sm:p-8 rounded-lg neon-border-cyan backdrop-blur-md">
-                    <h3 class="text-2xl font-orbitron font-semibold text-cyber-cyan mb-4">Envoyer un message sécurisé</h3>
-                    <form onsubmit="handleContactSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-mono text-gray-400 mb-1">NOM / ORGANISATION</label>
-                            <input type="text" required class="w-full bg-gray-950 border border-gray-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-cyber-cyan">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-mono text-gray-400 mb-1">EMAIL DE CONTACT</label>
-                            <input type="email" required class="w-full bg-gray-950 border border-gray-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-cyber-cyan">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-mono text-gray-400 mb-1">MESSAGE</label>
-                            <textarea rows="4" required class="w-full bg-gray-950 border border-gray-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-cyber-cyan"></textarea>
-                        </div>
-                        <button type="submit" class="cyber-btn w-full bg-cyber-cyan text-black font-orbitron font-bold py-3 hover:bg-cyan-300">
-                            TRANSMETTRE &gt;
-                        </button>
+                        <!-- Cloudflare Turnstile Widget (Remplace la data-sitekey si tu as ta propre clé) -->
+                        <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark"></div>
+
+                        <button type="submit" class="btn btn-primary" style="justify-content: center;">Envoyer le message</button>
                     </form>
                 </div>
-
-                <div class="space-y-6 flex flex-col justify-between">
-                    <div class="bg-cyber-card p-6 rounded-lg neon-border-red backdrop-blur-md space-y-4">
-                        <h3 class="text-xl font-orbitron font-semibold text-cyber-red">Coordonnées Réseau</h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex items-center space-x-3 text-gray-300">
-                                <i class="fas fa-envelope text-cyber-cyan text-lg"></i>
-                                <span>enzo.ceccarelli@bts-sio.fr</span>
-                            </div>
-                            <div class="flex items-center space-x-3 text-gray-300">
-                                <i class="fab fa-linkedin text-cyber-cyan text-lg"></i>
-                                <span>linkedin.com/in/enzo-ceccarelli</span>
-                            </div>
-                            <div class="flex items-center space-x-3 text-gray-300">
-                                <i class="fab fa-github text-cyber-cyan text-lg"></i>
-                                <span>github.com/enzoceccarelli</span>
-                            </div>
-                            <div class="flex items-center space-x-3 text-gray-300">
-                                <i class="fas fa-location-dot text-cyber-cyan text-lg"></i>
-                                <span>France &bull; BTS SIO Option SISR</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-4 bg-gray-950/90 border border-cyber-cyan/30 rounded text-xs text-gray-400 font-mono">
-                        <p class="text-cyber-cyan font-bold mb-1">[SYSTÈME STATUS]</p>
-                        <p>Tout le trafic PDF est disponible et encrypté localement. Vous pouvez prévisualiser directement vos épreuves dans le panneau modal.</p>
-                    </div>
-                </div>
             </div>
         </section>
-
     </main>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-cyber-cyan/20 bg-gray-950/90 py-6 text-center text-xs font-mono text-gray-500">
-        <p>&copy; 2026 Enzo Ceccarelli - Portfolio BTS SIO SISR Cyberpunk</p>
-        <p class="mt-1 text-gray-600">Arrière-plan : <span class="text-cyber-cyan">télécharger_2.jpg</span> | Tous droits réservés.</p>
+    <footer>
+        <p>&copy; <span id="year"></span> Enzo Ceccarelli — Portfolio BTS SIO SISR</p>
+        <p style="margin-top: 8px; font-size: 1.2rem;">
+            <a href="https://linkedin.com" target="_blank" style="color: var(--primary);" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </p>
     </footer>
 
-    <!-- MODALE PREVISUALISATION PDF -->
-    <div id="pdf-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-gray-950 w-full max-w-4xl h-[85vh] rounded-lg neon-border-cyan flex flex-col overflow-hidden">
-            <div class="p-4 border-b border-cyber-cyan/30 flex items-center justify-between bg-gray-900">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-file-pdf text-cyber-red text-xl"></i>
-                    <h3 id="pdf-modal-title" class="font-orbitron font-bold text-white text-sm sm:text-base">Document PDF</h3>
-                </div>
-                <div class="flex items-center gap-3">
-                    <a id="pdf-download-link" href="#" download class="text-xs bg-cyber-cyan/20 hover:bg-cyber-cyan hover:text-black border border-cyber-cyan text-cyber-cyan px-3 py-1.5 rounded font-orbitron transition-all flex items-center gap-1">
-                        <i class="fas fa-download"></i> Télécharger
-                    </a>
-                    <button onclick="closePdfModal()" class="text-gray-400 hover:text-cyber-red text-2xl font-bold px-2">&times;</button>
-                </div>
-            </div>
-            <div class="flex-1 bg-gray-900 relative">
-                <iframe id="pdf-frame" src="" class="w-full h-full border-none"></iframe>
-                <!-- Message de secours si le PDF local n'existe pas encore -->
-                <div id="pdf-fallback" class="absolute inset-0 bg-gray-950 flex flex-col items-center justify-center p-6 text-center hidden">
-                    <i class="fas fa-exclamation-triangle text-cyber-red text-4xl mb-3"></i>
-                    <p class="text-lg font-orbitron text-white mb-2">Fichier PDF local en attente de déploiement</p>
-                    <p class="text-sm text-gray-400 max-w-md mb-4">Le lien du document est configuré pour pointeur vers le dossier local <code class="text-cyber-cyan font-mono">/documents/</code>.</p>
-                    <a id="pdf-direct-btn" href="#" target="_blank" class="cyber-btn bg-cyber-cyan text-black px-4 py-2 font-orbitron text-xs font-bold">Ouvrir l'emplacement direct</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- BANNIÈRE CONSENTEMENT COOKIES RGPD CYBERPUNK -->
-    <div id="cookie-banner" class="fixed bottom-4 right-4 max-w-md bg-gray-950/95 border border-cyber-cyan p-5 rounded-lg neon-border-cyan z-50 text-xs font-mono space-y-3 hidden">
-        <div class="flex items-center space-x-2 text-cyber-cyan">
-            <i class="fas fa-cookie-bite text-lg"></i>
-            <span class="font-orbitron font-bold">PROTOCOLE DE COOKIES & PRIVACY</span>
-        </div>
-        <p class="text-gray-300">
-            Ce portfolio utilise des cookies techniques de session anonymes pour optimiser le rendu graphique et la prévisualisation de vos fichiers PDF.
-        </p>
-        <div class="flex gap-2">
-            <button onclick="acceptCookies()" class="flex-1 bg-cyber-cyan text-black font-orbitron font-bold py-1.5 rounded hover:bg-cyan-300">ACCEPTER</button>
-            <button onclick="acceptCookies()" class="flex-1 bg-gray-800 text-gray-300 font-orbitron py-1.5 rounded border border-gray-600 hover:bg-gray-700">REFUSER</button>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT ANIMATIONS & LOGIQUE SCROLL / PDF -->
     <script>
-        // BOOT TERMINAL ANIMATION
-        window.addEventListener('load', () => {
-            const bar = document.getElementById('boot-progress');
-            setTimeout(() => { bar.style.width = '40%'; }, 200);
-            setTimeout(() => { bar.style.width = '80%'; }, 500);
-            setTimeout(() => { bar.style.width = '100%'; }, 900);
-            setTimeout(() => { finishBoot(); }, 1200);
+        // Année dynamique
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-            // Vérifier RGPD
-            if(!localStorage.getItem('cookies_accepted')) {
-                document.getElementById('cookie-banner').classList.remove('hidden');
-            }
+        // Menu Toggle Mobile
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
 
-        function finishBoot() {
-            const bootScreen = document.getElementById('boot-screen');
-            bootScreen.style.opacity = '0';
-            bootScreen.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-                bootScreen.style.display = 'none';
-            }, 500);
-        }
+        // Fermer le menu mobile lors d'un clic sur un lien
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
 
-        // MOBILE MENU
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        // SMOOTH SCROLL SLIDE VISIBILITY ON SCROLL
-        const sections = document.querySelectorAll('.section-slide');
+        // Animation de révélation au scroll
+        const observerOptions = { threshold: 0.15 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
                 }
             });
-        }, { threshold: 0.15 });
+        }, observerOptions);
 
-        sections.forEach(sec => observer.observe(sec));
-
-        // MODALE PREVISUALISATION PDF
-        function openPdfModal(pdfPath, title) {
-            const modal = document.getElementById('pdf-modal');
-            const frame = document.getElementById('pdf-frame');
-            const modalTitle = document.getElementById('pdf-modal-title');
-            const downloadLink = document.getElementById('pdf-download-link');
-            const fallback = document.getElementById('pdf-fallback');
-            const directBtn = document.getElementById('pdf-direct-btn');
-
-            modalTitle.innerText = title;
-            downloadLink.href = pdfPath;
-            frame.src = pdfPath;
-            directBtn.href = pdfPath;
-
-            // Détection si l'iframe ne charge pas un vrai PDF local
-            frame.onerror = function() {
-                fallback.classList.remove('hidden');
-            };
-
-            modal.classList.remove('hidden');
-        }
-
-        function closePdfModal() {
-            const modal = document.getElementById('pdf-modal');
-            const frame = document.getElementById('pdf-frame');
-            frame.src = "";
-            modal.classList.add('hidden');
-        }
-
-        // BANNIÈRE COOKIES
-        function acceptCookies() {
-            localStorage.setItem('cookies_accepted', 'true');
-            document.getElementById('cookie-banner').classList.add('hidden');
-        }
-
-        // CONTACT FORM
-        function handleContactSubmit(e) {
-            e.preventDefault();
-            alert("Transmission du message réussie. Enzo Ceccarelli vous répondra rapidement.");
-            e.target.reset();
-        }
-
-        // CANVAS PARTICULES ET RAYONS OVERLAY
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.8;
-                this.speedY = (Math.random() - 0.5) * 0.8;
-                this.color = Math.random() > 0.4 ? '#00f3ff' : '#ff0055';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if(this.x < 0) this.x = canvas.width;
-                if(this.x > canvas.width) this.x = 0;
-                if(this.y < 0) this.y = canvas.height;
-                if(this.y > canvas.height) this.y = 0;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for(let i=0; i<60; i++) {
-            particles.push(new Particle());
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
