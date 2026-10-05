@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Enzo Ceccarelli | Cyber Operations & SISR Portfolio</title>
+    <title>Enzo Ceccarelli | Portfolio du BTS SIO SISR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portfolio d'Enzo Ceccarelli - Administration Systèmes, Réseaux & Cybersécurité (BTS SIO SISR)">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/shield.png">
+    <!-- Favicon Icône de Serveur -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/server.png">
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -394,6 +394,42 @@
         box-shadow: 0 0 10px var(--primary-glow);
     }
 
+    /* --------------------
+        BANNIÈRE COOKIES RGPD
+    --------------------- */
+    #cookie-banner {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 40px);
+        max-width: 800px;
+        background: rgba(11, 15, 25, 0.95);
+        border: 1px solid var(--primary);
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 8px;
+        padding: 1.2rem 1.5rem;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    #cookie-banner p {
+        font-size: 0.85rem;
+        color: var(--text);
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .cookie-buttons {
+        display: flex;
+        gap: 0.8rem;
+    }
+
     footer {
         padding: 2rem 0;
         text-align: center;
@@ -439,8 +475,8 @@
                     <li><a href="#epreuve-e4">/E5-E4</a></li>
                     <li><a href="#veille">/Veille</a></li>
                     <li><a href="#contact">/Contact</a></li>
-                    <!-- Remplace par l'URL exacte de ton profil LinkedIn -->
-                    <li><a href="https://www.linkedin.com/in/ton-profil-linkedin/" target="_blank" rel="noopener noreferrer" class="nav-social" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a></li>
+                    <!-- Lien LinkedIn direct -->
+                    <li><a href="https://www.linkedin.com/in/enzo-ceccarelli-891436324" target="_blank" rel="noopener noreferrer" class="nav-social" title="LinkedIn Profile"><i class="fab fa-linkedin"></i></a></li>
                 </ul>
             </nav>
         </div>
@@ -493,7 +529,7 @@
                 <div class="card experience-card">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px;">
                         <div>
-                            <h3>Technicien Helpdesk & Administration Systemes</h3>
+                            <h3>Technicien Helpdesk & Administration Systèmes</h3>
                             <p style="color: var(--primary); font-family: var(--font-mono);">3ᵉ Régiment d'Hélicoptères de Combat (3RHC)</p>
                         </div>
                         <span class="tag">Environnement Critique / Défense</span>
@@ -675,7 +711,7 @@
                         <input type="email" name="email" placeholder="ADRESSE EMAIL" required>
                         <textarea name="message" placeholder="MESSAGE..." rows="5" required></textarea>
 
-                        <!-- Turnstile CAPTCHA -->
+                        <!-- Turnstile CAPTCHA Widget -->
                         <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="dark"></div>
 
                         <button type="submit" class="btn btn-primary" style="justify-content: center;"><i class="fas fa-paper-plane"></i> Transmettre</button>
@@ -685,11 +721,19 @@
         </section>
     </main>
 
+    <!-- BANNIÈRE RGPD / COOKIES -->
+    <div id="cookie-banner" style="display: none;">
+        <p><i class="fas fa-shield-halved" style="color: var(--primary); margin-right: 6px;"></i> Ce site utilise des cookies techniques nécessaires à son bon fonctionnement (protection anti-spam Captcha et préférences d'affichage). Conformément au RGPD, vous pouvez choisir de les accepter ou de les refuser.</p>
+        <div class="cookie-buttons">
+            <button id="accept-cookies" class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.75rem;">Accepter</button>
+            <button id="refuse-cookies" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.75rem;">Refuser</button>
+        </div>
+    </div>
+
     <footer>
-        <p>&copy; <span id="year"></span> Enzo Ceccarelli // All Security Operations Maintained</p>
+        <p>&copy; <span id="year"></span> Enzo Ceccarelli // Portfolio BTS SIO SISR</p>
         <p style="margin-top: 8px;">
-            <!-- Remplace aussi par ton lien LinkedIn ici -->
-            <a href="https://www.linkedin.com/in/ton-profil-linkedin/" target="_blank" rel="noopener noreferrer" style="color: var(--primary);" title="Profil LinkedIn"><i class="fab fa-linkedin font-size: 1.2rem;"></i></a>
+            <a href="https://www.linkedin.com/in/enzo-ceccarelli-891436324" target="_blank" rel="noopener noreferrer" style="color: var(--primary);" title="Profil LinkedIn"><i class="fab fa-linkedin" style="font-size: 1.2rem;"></i></a>
         </p>
     </footer>
 
@@ -702,7 +746,26 @@
         const navLinks = document.getElementById('nav-links');
         menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
 
-        // CANVASES ANIMATION: ROTATING DIGITAL GLOBE & NETWORK NODES
+        // BANNIÈRE COOKIES RGPD
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptBtn = document.getElementById('accept-cookies');
+        const refuseBtn = document.getElementById('refuse-cookies');
+
+        if (!localStorage.getItem('cookieConsent')) {
+            cookieBanner.style.display = 'flex';
+        }
+
+        acceptBtn.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'accepted');
+            cookieBanner.style.display = 'none';
+        });
+
+        refuseBtn.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'refused');
+            cookieBanner.style.display = 'none';
+        });
+
+        // ANIMATION CANVASES
         const canvas = document.getElementById('cyber-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -718,7 +781,6 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // Generate 3D sphere points
         for (let i = 0; i < numPoints; i++) {
             const theta = Math.acos(2 * Math.random() - 1);
             const phi = 2 * Math.PI * Math.random();
@@ -734,30 +796,21 @@
 
         function drawGlobe() {
             ctx.clearRect(0, 0, width, height);
-
             const centerX = width > 900 ? width * 0.8 : width * 0.5;
             const centerY = height * 0.5;
 
-            // Rotate points
             points.forEach(p => {
-                // Rotation Y
                 let x1 = p.x * Math.cos(angleY) - p.z * Math.sin(angleY);
                 let z1 = p.z * Math.cos(angleY) + p.x * Math.sin(angleY);
-
-                // Rotation X
                 let y2 = p.y * Math.cos(angleX) - z1 * Math.sin(angleX);
                 let z2 = z1 * Math.cos(angleX) + p.y * Math.sin(angleX);
 
-                p.x = x1;
-                p.y = y2;
-                p.z = z2;
+                p.x = x1; p.y = y2; p.z = z2;
 
-                // Projection
                 const scale = 400 / (400 + p.z);
                 const projX = p.x * scale + centerX;
                 const projY = p.y * scale + centerY;
 
-                // Draw Nodes
                 const alpha = Math.max(0.1, (p.z + globeRadius) / (2 * globeRadius));
                 ctx.beginPath();
                 ctx.arc(projX, projY, 2 * scale, 0, Math.PI * 2);
@@ -765,7 +818,6 @@
                 ctx.fill();
             });
 
-            // Draw Lines between nearby points
             for (let i = 0; i < points.length; i++) {
                 for (let j = i + 1; j < points.length; j++) {
                     const dx = points[i].x - points[j].x;
@@ -787,10 +839,8 @@
                     }
                 }
             }
-
             requestAnimationFrame(drawGlobe);
         }
-
         drawGlobe();
     </script>
 </body>
