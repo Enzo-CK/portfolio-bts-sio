@@ -123,6 +123,7 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         transition: all 0.3s ease;
+        text-decoration: none;
     }
 
     .nav-links a:hover {
@@ -472,6 +473,7 @@
                     <li><a href="#apropos">/À-Propos</a></li>
                     <li><a href="#experience">/3RHC</a></li>
                     <li><a href="#competences">/Compétences</a></li>
+                    <li><a href="#certifications">/Certifications</a></li>
                     <li><a href="#projets">/Projets</a></li>
                     <li><a href="#epreuve-e4">/E5-E4</a></li>
                     <li><a href="#veille">/Veille</a></li>
@@ -588,6 +590,57 @@
                             <li>Firewalling (pfSense, OPNsense)</li>
                         </ul>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CERTIFICATIONS & ATTESTATIONS -->
+        <section id="certifications">
+            <div class="container">
+                <h2 class="section-title">Certifications & Attestations</h2>
+                <div class="skills-grid">
+                    
+                    <div class="skill-card">
+                        <h4><i class="fas fa-user-shield"></i> Sensibilisation RGPD</h4>
+                        <p style="font-family: var(--font-mono); color: var(--success); font-size: 0.85rem; margin-bottom: 0.5rem;">4 Modules Validés</p>
+                        <ul>
+                            <li>Atelier RGPD (CNIL)</li>
+                            <li>Principes clés du RGPD</li>
+                            <li>Droits des personnes</li>
+                            <li>Sécurité des données</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-card">
+                        <h4><i class="fas fa-shield-halved"></i> Analyse de Risques</h4>
+                        <p style="font-family: var(--font-mono); color: var(--success); font-size: 0.85rem; margin-bottom: 0.5rem;">EBIOS RM</p>
+                        <ul>
+                            <li>EBIOS Risk Manager (ANSSI)</li>
+                            <li>Gestion des risques SI</li>
+                            <li>Identification des menaces</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-card">
+                        <h4><i class="fas fa-laptop-code"></i> Compétences Numériques</h4>
+                        <p style="font-family: var(--font-mono); color: var(--success); font-size: 0.85rem; margin-bottom: 0.5rem;">Certification Officielle</p>
+                        <ul>
+                            <li>Certification Pix</li>
+                            <li>Sécurité numérique</li>
+                            <li>Gestion des données</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-card">
+                        <h4><i class="fas fa-lock"></i> Sensibilisation Cybersécurité</h4>
+                        <p style="font-family: var(--font-mono); color: var(--success); font-size: 0.85rem; margin-bottom: 0.5rem;">Attestations de Suivi</p>
+                        <ul>
+                            <li>Attestation CyberSens</li>
+                            <li>Attestation BASTIDE</li>
+                            <li>Bonnes pratiques d'hygiène informatique</li>
+                        </ul>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -794,20 +847,6 @@
             gridPoints.push(ring);
         }
 
-        // Génération des Paquets de Données
-        const packets = [];
-        const numPackets = 20;
-
-        for (let i = 0; i < numPackets; i++) {
-            packets.push({
-                latIndex: Math.floor(Math.random() * latLines),
-                lonIndex: Math.floor(Math.random() * lonLines),
-                progress: Math.random(),
-                speed: 0.005 + Math.random() * 0.01,
-                dir: Math.random() > 0.5 ? 'lat' : 'lon'
-            });
-        }
-
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
@@ -816,10 +855,8 @@
         resize();
 
         function project(p) {
-            // Rotation Y
             let x1 = p.x * Math.cos(rotY) - p.z * Math.sin(rotY);
             let z1 = p.z * Math.cos(rotY) + p.x * Math.sin(rotY);
-            // Rotation X
             let y2 = p.y * Math.cos(rotX) - z1 * Math.sin(rotX);
             let z2 = z1 * Math.cos(rotX) + p.y * Math.sin(rotX);
 
@@ -839,7 +876,6 @@
             ctx.clearRect(0, 0, width, height);
             rotY += 0.003;
 
-            // 1. Dessin du fond glow de la sphère
             const centerX = width > 900 ? width * 0.78 : width * 0.5;
             const centerY = height * 0.5;
             const glowGradient = ctx.createRadialGradient(centerX, centerY, globeRadius * 0.2, centerX, centerY, globeRadius * 1.3);
@@ -851,114 +887,30 @@
             ctx.arc(centerX, centerY, globeRadius * 1.3, 0, Math.PI * 2);
             ctx.fill();
 
-            // 2. Traçage des Parallèles (Lignes horizontales)
-            for (let i = 1; i < latLines; i++) {
+            // Dessin des méridiens et parallèles
+            for (let i = 0; i <= latLines; i++) {
                 ctx.beginPath();
-                let firstProj = null;
-                for (let j = 0; j <= lonLines; j++) {
-                    const p = gridPoints[i][j % lonLines];
-                    const proj = project(p);
-                    if (j === 0) {
-                        ctx.moveTo(proj.x, proj.y);
-                        firstProj = proj;
-                    } else {
-                        ctx.lineTo(proj.x, proj.y);
-                    }
+                for (let j = 0; j < lonLines; j++) {
+                    const p = project(gridPoints[i][j]);
+                    if (j === 0) ctx.moveTo(p.x, p.y);
+                    else ctx.lineTo(p.x, p.y);
                 }
-                const alpha = Math.max(0.05, (firstProj.z + globeRadius) / (2 * globeRadius));
-                ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.25})`;
-                ctx.lineWidth = 0.8;
+                const pEnd = project(gridPoints[i][0]);
+                ctx.lineTo(pEnd.x, pEnd.y);
+                ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
                 ctx.stroke();
             }
 
-            // 3. Traçage des Méridiens (Lignes verticales)
             for (let j = 0; j < lonLines; j++) {
                 ctx.beginPath();
                 for (let i = 0; i <= latLines; i++) {
-                    const p = gridPoints[i][j];
-                    const proj = project(p);
-                    if (i === 0) ctx.moveTo(proj.x, proj.y);
-                    else ctx.lineTo(proj.x, proj.y);
+                    const p = project(gridPoints[i][j]);
+                    if (i === 0) ctx.moveTo(p.x, p.y);
+                    else ctx.lineTo(p.x, p.y);
                 }
-                const midProj = project(gridPoints[Math.floor(latLines/2)][j]);
-                const alpha = Math.max(0.05, (midProj.z + globeRadius) / (2 * globeRadius));
-                ctx.strokeStyle = `rgba(0, 240, 255, ${alpha * 0.25})`;
-                ctx.lineWidth = 0.8;
+                ctx.strokeStyle = 'rgba(0, 240, 255, 0.08)';
                 ctx.stroke();
             }
-
-            // 4. Points d'intersection & Nœuds réseau
-            for (let i = 0; i <= latLines; i++) {
-                for (let j = 0; j < lonLines; j++) {
-                    const proj = project(gridPoints[i][j]);
-                    if (proj.z > -100) { // Ne dessiner que la face avant
-                        const alpha = Math.max(0.1, (proj.z + globeRadius) / (2 * globeRadius));
-                        ctx.beginPath();
-                        ctx.arc(proj.x, proj.y, 1.5 * proj.scale, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(0, 240, 255, ${alpha * 0.7})`;
-                        ctx.fill();
-                    }
-                }
-            }
-
-            // 5. Anneau Orbital Cyber
-            ctx.beginPath();
-            const ringSegments = 60;
-            const ringRadius = globeRadius * 1.25;
-            for (let i = 0; i <= ringSegments; i++) {
-                const angle = (2 * Math.PI * i) / ringSegments + rotY * 1.5;
-                const p = {
-                    x: ringRadius * Math.cos(angle),
-                    y: ringRadius * Math.sin(angle) * 0.2, // Inclinaison
-                    z: ringRadius * Math.sin(angle)
-                };
-                const proj = project(p);
-                if (i === 0) ctx.moveTo(proj.x, proj.y);
-                else ctx.lineTo(proj.x, proj.y);
-            }
-            ctx.strokeStyle = 'rgba(112, 0, 255, 0.4)';
-            ctx.lineWidth = 1.5;
-            ctx.setLineDash([6, 6]);
-            ctx.stroke();
-            ctx.setLineDash([]); // Reset line style
-
-            // 6. Animation des Paquets de Données (Data Streams)
-            packets.forEach(pkt => {
-                pkt.progress += pkt.speed;
-                if (pkt.progress >= 1) {
-                    pkt.progress = 0;
-                    pkt.latIndex = Math.floor(Math.random() * latLines);
-                    pkt.lonIndex = Math.floor(Math.random() * lonLines);
-                }
-
-                let p1, p2;
-                if (pkt.dir === 'lat') {
-                    p1 = gridPoints[pkt.latIndex][pkt.lonIndex];
-                    p2 = gridPoints[pkt.latIndex][(pkt.lonIndex + 1) % lonLines];
-                } else {
-                    p1 = gridPoints[pkt.latIndex][pkt.lonIndex];
-                    p2 = gridPoints[(pkt.latIndex + 1) % latLines][pkt.lonIndex];
-                }
-
-                const currentP = {
-                    x: p1.x + (p2.x - p1.x) * pkt.progress,
-                    y: p1.y + (p2.y - p1.y) * pkt.progress,
-                    z: p1.z + (p2.z - p1.z) * pkt.progress
-                };
-
-                const proj = project(currentP);
-
-                if (proj.z > -50) {
-                    const alpha = Math.max(0.2, (proj.z + globeRadius) / (2 * globeRadius));
-                    ctx.beginPath();
-                    ctx.arc(proj.x, proj.y, 3.5 * proj.scale, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(0, 255, 102, ${alpha})`;
-                    ctx.shadowColor = '#00ff66';
-                    ctx.shadowBlur = 10;
-                    ctx.fill();
-                    ctx.shadowBlur = 0; // Reset glow
-                }
-            });
 
             requestAnimationFrame(animate);
         }
